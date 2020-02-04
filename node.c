@@ -152,9 +152,7 @@ int node_cmp(const void * n1, const void * n2)
 
     if(cmp<0)
         return -1;
-    else if(cmp == 0)
-        return 0;
-    else
+    else if (cmp>0)
         return 1;
 
     return -2;

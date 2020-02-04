@@ -96,10 +96,10 @@ int main (int argc, char** argv){
     aux=graph_insertNode(g, n1);
     fprintf(stdout,"Insertando nodo 1...resultado...: %d\n", aux);
     aux=graph_insertNode(g, n2);
-    fprintf(stdout,"Insertando nodo 2...resultado...: %d\n", aux);
+    fprintf(stdout,"Insertando nodo 2...resultado...: %d\n\n\n", aux);
 
     graph_insertEdge(g, node_getId(n2), node_getId(n1));    
-    fprintf(stdout, "Insertando edge: nodo 2  ---> nodo 1\n");
+    fprintf(stdout, "Insertando edge: nodo 2  ---> nodo 1\n\n\n");
 
     fprintf(stdout,"Conectados nodo 1 y nodo 2? ");
     if((graph_areConnected(g,node_getId(n1),node_getId(n2)))==TRUE){
@@ -111,14 +111,14 @@ int main (int argc, char** argv){
 
     fprintf(stdout,"Conectados nodo 2 y nodo 1? ");
     if((graph_areConnected(g,node_getId(n2),node_getId(n1)))==TRUE){
-        fprintf(stdout,"Si \n");
+        fprintf(stdout,"Si \n\n\n");
     }
     else{
-        fprintf(stdout,"No \n");
+        fprintf(stdout,"No \n\n\n");
     }
 
     aux=graph_insertNode(g, n2);
-    fprintf(stdout,"Insertando nodo 2...resultado...: %d\n", aux);
+    fprintf(stdout,"Insertando nodo 2...resultado...: %d\n\n\n", aux);
 
     graph_print(stdout, g);
 
