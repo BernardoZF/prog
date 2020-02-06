@@ -8,7 +8,7 @@
 @see
 */
 
-enum {NO_FILE_POS_VALUES = 2};
+enum {NUM_ARGUMENTS = 3};
 
 
 #include "graph.h"
@@ -303,7 +303,8 @@ Status graph_readFromFile (FILE *fin, Graph *g)
 {
     Node *n;
     char buff[MAX_LINE], name[MAX_LINE];
-    int i, nnodes = 0, id1, id2, label;
+    int i, nnodes = 0, id1, id2;
+    Label n_label;
     Status flag = ERROR;
 
     if ( fgets (buff, MAX_LINE, fin) != NULL)
@@ -314,13 +315,13 @@ Status graph_readFromFile (FILE *fin, Graph *g)
 
     for(i=0; i < nnodes; i++) {
         if ( fgets(buff, MAX_LINE, fin) != NULL)
-        if (sscanf(buff, "%d %s %d", &id1, name, &label) != NO_FILE_POS_VALUES) break;
+        if (sscanf(buff, "%d %s %d", &id1, name, &n_label) != NUM_ARGUMENTS) break;
 
         node_setName (n, name);
         node_setId (n, id1);
-        if(label ==0)
+        if(n_label ==0)
             node_setLabel(n,WHITE);
-        else if(label == 1)
+        else if(n_label == 1)
             node_setLabel(n, BLACK);
         else
             node_setLabel(n, ERROR_NODE);
@@ -335,7 +336,7 @@ Status graph_readFromFile (FILE *fin, Graph *g)
     }
 
     while ( fgets(buff, MAX_LINE, fin) ){
-      if ( sscanf(buff, "%d %d", &id1,&id2) == NO_FILE_POS_VALUES )
+      if ( sscanf(buff, "%d %d", &id1,&id2) == NUM_ARGUMENTS )
       if (graph_insertEdge(g, id1,id2) == ERROR) break;
     }
 

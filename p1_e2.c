@@ -1,9 +1,9 @@
 /**
-* @file p1_e1.c
+* @file p1_e2c
 * @author Bernardo Zambrano && Alvaro Platon
 * @date 4 Frebuary 2020
 * @version 1.0
-* @brief Test of TAD Node
+* @brief Test of TAD Graph
 **
 @details
 **
