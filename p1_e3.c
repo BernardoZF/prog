@@ -8,6 +8,7 @@ int main(int argc, char const *argv[])
 {
   FILE *pf=NULL;
   Graph *g=NULL;
+  int flag = 0;
 
   pf=fopen(argv[1], "r");
   if(!pf) {
@@ -22,15 +23,17 @@ int main(int argc, char const *argv[])
     return -1;
   }
 
-  if(graph_readFromFile(pf, g)==ERROR){
+
+  flag=graph_readFromFile(pf, g);
+  if(flag==ERROR){
     fprintf(stderr, "Error al crear el grafo\n");
     fclose(pf);
     graph_free(g);
     return -1;
   }
 
-
-  if(graph_print(stdout,g)==-1){
+  flag=graph_print(stdout,g);
+  if(flag==-1){
   fprintf(stderr, "Error al imprimir el archivo\n");
   fclose(pf);
   graph_free(g);

@@ -8,7 +8,7 @@
 @see
 */
 
-enum {NUM_ARGUMENTS = 3};
+enum {IDS_CONNECTS = 2, NUM_ARGUMENTS};
 
 
 #include "graph.h"
@@ -303,8 +303,7 @@ Status graph_readFromFile (FILE *fin, Graph *g)
 {
     Node *n;
     char buff[MAX_LINE], name[MAX_LINE];
-    int i, nnodes = 0, id1, id2;
-    Label n_label;
+    int i, nnodes = 0, id1, id2, n_label;
     Status flag = ERROR;
 
     if ( fgets (buff, MAX_LINE, fin) != NULL)
@@ -330,13 +329,12 @@ Status graph_readFromFile (FILE *fin, Graph *g)
     }
 
     if (i < nnodes) {
-      printf("i<nnodes\n");
         node_free(n);
         return ERROR;
     }
 
     while ( fgets(buff, MAX_LINE, fin) ){
-      if ( sscanf(buff, "%d %d", &id1,&id2) == NUM_ARGUMENTS )
+      if ( sscanf(buff, "%d %d", &id1,&id2) == IDS_CONNECTS )
       if (graph_insertEdge(g, id1,id2) == ERROR) break;
     }
 
