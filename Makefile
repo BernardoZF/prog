@@ -6,7 +6,7 @@ all : $(EXE)
 
 .PHONY : clean
 clean :
-	rm -f *.o core $(EXE)
+	rm -f *.o core $(EXE) node.h.gch
 
 $(EXE) : % : %.o node.o graph.o
 	@echo "#---------------------------"
