@@ -16,7 +16,6 @@
 #include <string.h>
 
 
-
  struct _Node{
     char name [NAME_L]; /*!<Node name */
     long id;            /*!<Node id*/

@@ -139,8 +139,9 @@ int main (int argc, char** argv){
         fprintf(stdout,"Sí.\n");
     }else fprintf(stdout,"No.\n");
     
-    /*LIBERAR*/
+    
     node_free(n1);
     node_free(n2);
     return 0;
 }
+
