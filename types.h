@@ -12,7 +12,6 @@
 #ifndef TYPES_H_
 #define TYPES_H_
 
-#define NAME_L 64
 
 
 

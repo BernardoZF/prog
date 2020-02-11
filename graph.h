@@ -17,8 +17,7 @@
 #include <stdio.h>
 #include <string.h>
 typedef struct _Graph Graph;
-#define MAX_NODES 1064
-#define MAX_LINE 1000   
+  
 
 
 /**

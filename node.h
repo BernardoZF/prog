@@ -16,6 +16,8 @@
 #include "types.h"
 #include <stdio.h>
 #include <stdlib.h>
+#define NAME_L 64
+
 /**
 * @brief Label to charactrize the node state (to be used in P2)
 *

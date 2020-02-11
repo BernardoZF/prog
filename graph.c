@@ -8,10 +8,13 @@
 @see
 */
 
-enum {IDS_CONNECTS = 2, NUM_ARGUMENTS};
 
 
 #include "graph.h"
+#define MAX_NODES 1064
+#define MAX_LINE 1000 
+enum {IDS_CONNECTS = 2, NUM_ARGUMENTS};
+
 struct _Graph {
     Node *nodes[MAX_NODES];                  /*!<Array with the graph nodes*/
     Bool connections[MAX_NODES][MAX_NODES];  /*!<Adjacency matrix */
