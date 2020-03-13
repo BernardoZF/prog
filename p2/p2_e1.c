@@ -6,7 +6,7 @@
 
 #define MAX_WORD 1024
 
-Status reverseWords (char *strout, const char *strin);
+char *reverseWords (char *strout, const char *strin);
 
 int main(){
   char in[MAX_WORD], out[MAX_WORD];
@@ -29,18 +29,22 @@ int main(){
 *@paramstrin, Pointer to the input expression
 *@returnThe function returns OK or ERROR
 **/
-Status reverseWords (char *strout, const char *strin){
+char * reverseWords (char *strout, const char *strin){
   Stack *s = NULL;
   int i, j=0;
 
   s = stack_init(char_free, char_copy, char_print);
   if(!s) return ERROR;
+  
+  i = strlen(strin);
+  printf("%d", i);
+  i = 0;
 
   for(i=0; strin[i] != '\0'; i++){
     if(strin[i] == ' '){
       while(stack_isEmpty(s) == FALSE){
         strncpy(&strout[j], (char*)stack_pop(s), 1);
-        j++;
+        j++; 
       }
       strout[j] = ' ';
       j++;
@@ -50,10 +54,10 @@ Status reverseWords (char *strout, const char *strin){
 
   while(stack_isEmpty(s) == FALSE){
     strncpy(&strout[j], (char*)stack_pop(s), 1);
-    j++;
+    j++; 
   }
 
   stack_free(s);
 
-  return OK;
+  return strout;
 }
