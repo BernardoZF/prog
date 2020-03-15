@@ -5,6 +5,7 @@
 #include "stack_types.h"
 
 int main(){
+    char *car;
     char array[3]={'a', 'b', 'c'};
     Stack *s=NULL;
     int i;
@@ -21,8 +22,9 @@ int main(){
     fprintf(stdout, "Stack size: %ld\n", stack_size(s));
 
     while(stack_isEmpty(s)==FALSE){
-
-        fprintf(stdout, "El elemento extraido: %c\n", *(char *)stack_pop(s));
+      car = (char*)stack_pop(s);
+      fprintf(stdout, "El elemento extraido: %c\n", *car);
+      free(car);
     }
 
     fprintf(stdout, "Stack size: %ld\n", stack_size(s));

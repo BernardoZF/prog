@@ -10,6 +10,8 @@ int main(){
     Node *n =NULL;
     Stack *snode =NULL;
     Stack *sstring=NULL;
+    char *car;
+    Node *naux;
 
     n=node_init();
     if(!n) return -1;
@@ -39,14 +41,16 @@ int main(){
 
     fprintf(stdout, "Poping nodes.... \n");
     while(stack_isEmpty(snode)==FALSE){
-
-        node_print(stdout, (Node*)stack_pop(snode));
+      naux = (Node*)stack_pop(snode);
+      node_print(stdout, naux);
+      node_free(naux);
     }
 
     fprintf(stdout, "\nPoping nodes-names.... \n");
     while(stack_isEmpty(sstring)==FALSE){
-
-        fprintf(stdout, " ", *(char *)stack_pop(sstring));
+      car = (char *)stack_pop(sstring);
+      fprintf(stdout, "%c", *car);
+      free(car);
     }
 
     node_free(n);

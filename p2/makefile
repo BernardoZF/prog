@@ -5,7 +5,8 @@ LDFLAGS=-L./
 LDLIBS=-lstack_fp
 ### -lm enlaza la biblioteca matematica, -pthread enlaza la biblioteca de hilos
 LIBS = -lm -pthread
-all:p2_e0_a p2_e0_b
+EXE=p2_e0_a p2_e0_b
+all:$(EXE)
 ######################################################################
 # $@ es el item que aparece a la izquierda de ':'
 # $< es el primer item en la lista de dependencias
@@ -28,4 +29,4 @@ clean:
 	rm -f *.o core $(EXE)
 
 val:
-	valgrind --tool=memcheck --leak-check=yes ./p2_e0_a
+	valgrind --tool=memcheck --leak-check=yes ./p2_e0_b
