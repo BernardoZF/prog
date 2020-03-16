@@ -1,9 +1,11 @@
 /**
-* @file graph.h
-* @author Profesores Prog2
-* @date Created on 29 January 2020, 15:03
+* @file graph.c
+* @author Bernardo zambrano && Alvaro Platon
+* @date 4 February 2020
 * @version 1.0
-* @brief Library to manage TAD Graph
+* @brief TAD Node
+**
+@details
 **
 @see
 */
@@ -12,7 +14,7 @@
 
 #include "graph.h"
 #define MAX_NODES 1064
-#define MAX_LINE 1000 
+#define MAX_LINE 1000
 enum {IDS_CONNECTS = 2, NUM_ARGUMENTS};
 
 struct _Graph {
@@ -95,14 +97,14 @@ Status graph_insertEdge (Graph *g, const long nId1, const long nId2)
 {
     int indx1, indx2;
 
-    if (!g || nId1<0 || nId1<0) return ERROR;
+    if (!g || nId1==-1 || nId1==-1) return ERROR;
 
 	indx1 = find_node_index(g, nId1);
 	indx2 = find_node_index(g, nId2);
 
 	if (indx1 == -1 || indx2 == -1){
 		fprintf(stderr, "Error al buscar el indice del nodo.\n");
-		return ERROR;
+		return OK;
 	}
 
 	if (g->connections[indx1][indx2] == TRUE){
@@ -133,7 +135,7 @@ Node *graph_getNode (const Graph *g, long nId)
 {
     int indx;
     Node *n;
-    
+
     if(!g||nId<0)
         return NULL;
     indx=find_node_index(g, nId);
@@ -169,13 +171,13 @@ long * graph_getNodesId (const Graph *g)
     int i;
     long *ids;
 
+    if(!g)
+        return NULL;
 
     ids=(long *)malloc(sizeof(long)*g->num_nodes);
     if(!ids)
         return NULL;
-    if(!g)
-        return NULL;
-    
+
     for(i=0;i<g->num_nodes ;i++){
         ids[i]=node_getId(g->nodes[i]);
     }
@@ -190,7 +192,7 @@ int graph_getNumberOfNodes (const Graph *g)
 {
     if(!g)
         return -1;
-    
+
     return g->num_nodes;
 }
 
@@ -200,7 +202,7 @@ int graph_getNumberOfEdges (const Graph *g)
 {
     if(!g)
         return -1;
-    
+
     return g->num_edges;
 }
 
@@ -218,7 +220,7 @@ Bool graph_areConnected (const Graph *g, const long nId1, const long nId2)
     indx2=find_node_index(g, nId2);
     if(indx2<0)
         return FALSE;
-    
+
     return g->connections[indx1][indx2];
 }
 
@@ -250,7 +252,7 @@ long* graph_getConnectionsFrom (const Graph *g, const long fromId)
 
     if(!g || fromId<0)
         return NULL;
-    
+
     indx=find_node_index(g, fromId);
     if (indx<0)
         return NULL;
@@ -327,7 +329,7 @@ Status graph_readFromFile (FILE *fin, Graph *g)
             node_setLabel(n, BLACK);
         else
             node_setLabel(n, ERROR_NODE);
-            
+
         if ( graph_insertNode (g, n) == ERROR) break;
     }
 
@@ -349,7 +351,7 @@ Status graph_readFromFile (FILE *fin, Graph *g)
 
 
 /* It returns the index of the node with id nId1*/
-int find_node_index(const Graph * g, long nId1) 
+int find_node_index(const Graph * g, long nId1)
 {
 int i;
 
@@ -365,9 +367,9 @@ return -1;
 }
 
 /**It returns an array with the indices of the nodes connected to the node whose index is index
- It also allocates memory for the array. 
+ It also allocates memory for the array.
  */
-long* graph_getConnectionsIndex(const Graph * g, int index) 
+long* graph_getConnectionsIndex(const Graph * g, int index)
 {
 long *array = NULL, i, j = 0, size;
 

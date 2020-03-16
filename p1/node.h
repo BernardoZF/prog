@@ -72,7 +72,7 @@ long node_getId (const Node * n);
 * @param n Node address
 * @return Returns a pointer to the name of the node, or NULL in case of error
 */
-const char* node_getName (Node * n);
+const char* node_getName (const Node * n);
 
 
 /**
