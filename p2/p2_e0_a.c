@@ -13,7 +13,7 @@ int main(){
 
     /*Inicializamos nuestra pila y hacemos control de errores*/
     stc=stack_init(char_free, char_copy, char_print);
-    if(!s) return -1;
+    if(!stc) return -1;
 
     /*Extremos de la pila los elementos*/
     for(i=0; i<DIM_SIZE; i++){
