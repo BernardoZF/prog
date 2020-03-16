@@ -3,6 +3,7 @@
 #include <string.h>
 #include "stack_fp.h"
 #include "stack_types.h"
+#define DIM_CAD 1000
 
 /**
 * @brief: Get the postfix expression of an infix expression.
@@ -63,18 +64,23 @@ int prec (char *c){
 Status infix2postfix (char *suf, const char *in){
   Stack *s = NULL;
   char *ele = NULL;
-  char cpy[1000];
+  char cpy[DIM_CAD];
   int i = 0, j = 0;
 
   if(!in) return ERROR;
 
   if(!suf) return ERROR;
-
+  
+  /*Incicializamos la pila y su correspondiente control de errores*/
   s=stack_init(char_free, char_copy, char_print);
   if(!s) return ERROR;
 
   strcpy(cpy, in);
 
+  /*Mientras que nos nos encontremos al final de la cadena, comprobamos si la pila esta llena
+  y que se encuentra en el top de dicha pila. Introduciremos en la pila los valores que vayamos
+  encontrando y liberando cada elemento a medida que se avanza por nuestra cadena. Una vez
+  hecho esto, extraemos de la pila los caracteres de la cadena.*/
   while(cpy[i] != '\0'){
     if(isOperator(cpy[i]) == TRUE){
       while((stack_isEmpty(s) == FALSE) && (prec((char*)stack_top(s)) >= prec(cpy+i))){
@@ -85,11 +91,13 @@ Status infix2postfix (char *suf, const char *in){
       }
       stack_push(s, &cpy[i]);
     }
-
+    
+    /*Si el caracter de la cadena es '(' extraemos valores en nuestra pila*/
     else if(cpy[i] == '('){
       stack_push(s, &cpy[i]);
     }
 
+    /*En cambio, si es ')' introducimos valores en nuestra pila*/
     else if(cpy[i] == ')'){
       while((stack_isEmpty(s) == FALSE) && (*(char*)stack_top(s)!='(')){
         ele = (char *)stack_pop(s);
@@ -98,7 +106,7 @@ Status infix2postfix (char *suf, const char *in){
         j++;
       }
       ele=(char*)stack_pop(s);
-      free(ele);
+      free(ele);//Liberamos los elementos
     }
 
     else{
@@ -110,16 +118,18 @@ Status infix2postfix (char *suf, const char *in){
   while(stack_isEmpty(s) == FALSE){
     ele = (char *)stack_pop(s);
     suf[j] = *ele;
-    free(ele);
+    free(ele);//Liberamos los elementos
     j++;
   }
+  
+  /*Liberamos la pila*/
   stack_free(s);
   return TRUE;
 }
 
 int main(int argc, char* argv[]){
-  char suf[1000]="suffix";
-  char in[1000]="infix";
+  char suf[DIM_CAD]="suffix";
+  char in[DIM_CAD]="infix";
 
   if(argc!=2){
     fprintf(stdout, "ERROR EN ARGUMENTOS");
