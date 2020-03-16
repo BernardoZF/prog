@@ -4,24 +4,24 @@
 #include "element.h"
 
 struct _Element {
-    char *a;
+    char *x;
 };
 
 Element * element_init(){
-    Element *ele=NULL;
+    Element *e=NULL;
 
     ele=(Element *)malloc(sizeof(Element));
-    if(!ele) return NULL;
+    if(!e) return NULL;
 
-    ele->a = NULL;
+    e->x = NULL;
 
-    return ele;
+    return e;
 }
-void element_free(Element *ele){
-    if(!ele) return;
+void element_free(Element *e){
+    if(!e) return;
 
-    free(ele->a);
-    free(ele);
+    free(e->x);
+    free(e);
 
     return;
 }
@@ -29,31 +29,31 @@ void element_free(Element *ele){
 Element * element_setInfo(Element s, void c){
   if(!s || !c) return NULL;
 
-  if(s->a !=NULL) free(s->a);
+  if(s->x !=NULL) free(s->x);
 
-  s->a = (char *)malloc(sizeof(char));
+  s->x = (char *)malloc(sizeof(char));
   char *temp = (char *)c;
-  (*s->a)=(*temp);
+  (*s->x)=(*temp);
 
-  if(!s->a) return NULL;
+  if(!s->x) return NULL;
 
   return s;
 
 }
 
-void * element_getInfo(Element *ele){
-    if(!ele) return NULL;
+void * element_getInfo(Element *e){
+    if(!e) return NULL;
 
-    return ele;
+    return e;
 }
 
-Element * element_copy(const Element *ele){
+Element * element_copy(const Element *e){
     Element *s;
 
     s=element_init();
     if(!s) return NULL;
 
-    element_setInfo(s, ele->a);
+    element_setInfo(s, e->x);
 
     return s;
 }
@@ -61,19 +61,19 @@ Element * element_copy(const Element *ele){
 Bool element_equals(const Element *e1, const Element *e2){
     if(!e1 || !e2) return FALSE;
 
-    if(e1->a == e2->a) return TRUE;
+    if(e1->x == e2->x) return TRUE;
 
     return FALSE;
 }
 
-int element_print(FILE *f, const Element *ele){
-    int k=0;
+int element_print(FILE *f, const Element *e){
+    int p=0;
 
-    if(!f || !ele) return -1;
+    if(!f || !e) return -1;
 
-    k=fprintf(f, "[%s]", ele->a);
+    p=fprintf(f, "[%s]", e->x);
 
-    if(!k) return -1;
+    if(!p) return -1;
 
-    return k;
+    return p;
 }
