@@ -13,14 +13,14 @@ typedef struct _Stack Stack;
 * @brief Esta funcion inicializa nuestra pila
 *
 * @return devuelve nuestra pila inicializada con la correspondiente reserva de memoria 
-* */
+*/
 Stack * stack_init ();
 
 /**
 * @brief Esta funcion libera nuestra pila
 *
 * @return devuelve nuestra pila con la memoria que se reservo liberada
-* */
+*/
 void stack_free(Stack *s);
 
 /**
@@ -29,7 +29,7 @@ void stack_free(Stack *s);
 * @param s Un puntero a pila
 * @param e Un puntero a elemento
 * @return OK o ERROR segun si el elemento ha sido extraido correctamente o no
-* */
+*/
 Status stack_push(Stack *s, const Element *s);
 
 /**
@@ -37,7 +37,7 @@ Status stack_push(Stack *s, const Element *s);
 *
 * @param s Un puntero a pila
 * @return El elemento introducido
-* */
+*/
 Element * stack_pop(Stack *s);
 
 /**
@@ -45,7 +45,7 @@ Element * stack_pop(Stack *s);
 *
 * @param s Un puntero a pila
 * @return La siguiente posicion a introducir en la pila
-* */
+*/
 Element * stack_top(const Stack *s);
 
 /**
@@ -53,7 +53,7 @@ Element * stack_top(const Stack *s);
 *
 * @param s Un puntero a pila
 * @return TRUE o FALSE segun si la pila esta o no vacia
-* */
+*/
 Bool stack_isEmpty(const Stack *s);
 
 /**
@@ -61,7 +61,7 @@ Bool stack_isEmpty(const Stack *s);
 *
 * @param s Un puntero a pila
 * @return TRUE o FALSE segun si la pila esta o no llena
-* */
+*/
 Bool stack_isFull(const Stack *s);
 
 /**
@@ -70,7 +70,7 @@ Bool stack_isFull(const Stack *s);
 * @param f Un fichero de texto
 * @param s Un puntero a pila
 * @return el valor de la pila
-* */
+*/
 int stack_print(FILE*, const Stack *s);
 
 #endif /* STACK_H */
