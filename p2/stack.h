@@ -42,7 +42,7 @@ Element * stack_pop(Stack *s);
 * @brief Esta funcion devuelve el elemento que se encuentra en la posicion mas alta de la pila
 *
 * @param s Un puntero a pila
-* @return La siguiente posicion a introducir en la pila
+* @return El valor en la posicion mas alta de la pila
 */
 Element * stack_top(const Stack *s);
 
