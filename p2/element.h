@@ -10,10 +10,10 @@ typedef struct _Element Element;
 
 
 Element * element_init();
-void element_free(Element *);
-Element * element_setInfo(Element *, void*);
-void * element_getInfo(Element *);
-Element * element_copy(const Element *);
-Bool element_equals(const Element *, const Element *);
-int element_print(FILE *, const Element *);
+void element_free(Element *e);
+Element * element_setInfo(Element *e, void*c);
+void * element_getInfo(Element *e);
+Element * element_copy(const Element *e);
+Bool element_equals(const Element *e, const Element *e);
+int element_print(FILE *, const Element *e);
 #endif /* ELESTACK_H */
