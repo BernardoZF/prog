@@ -47,11 +47,11 @@ Element * element_copy(const Element *e);
 /**
 * @brief Esta funcion establece si dos elementos son iguales o no
 *
-* @param e Un puntero a elemento 
-* @param e Un puntero a elemento
+* @param e1 Un puntero a elemento 
+* @param e2 Un puntero a elemento
 * @return TRUE o FALSE dependiendo de si los elementos son o no iguales
 */
-Bool element_equals(const Element *e, const Element *e);
+Bool element_equals(const Element *e1, const Element *e2);
 
 /**
 * @brief Esta funcion imprime el elemento

@@ -28,7 +28,7 @@ void stack_free(Stack *s);
 * @param e Un puntero a elemento
 * @return OK o ERROR segun si el elemento ha sido extraido correctamente o no
 */
-Status stack_push(Stack *s, const Element *s);
+Status stack_push(Stack *s, const Element *e);
 
 /**
 * @brief Esta funcion introduce un elemento en una pila
@@ -70,5 +70,14 @@ Bool stack_isFull(const Stack *s);
 * @return el valor de la pila
 */
 int stack_print(FILE*, const Stack *s);
+
+
+/**
+ * @brief ESta funcion te devuelve el tamaño de la pila
+ * 
+ * @param s Puntero de la pila de la que se quiere saber el tamanyo
+ * @return tamanyo de la pila
+ */
+int stack_size(const Stack * s);
 
 #endif /* STACK_H */

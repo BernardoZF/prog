@@ -5,7 +5,7 @@ LDFLAGS=-L./
 LDLIBS=-lstack_fp
 ### -lm enlaza la biblioteca matematica, -pthread enlaza la biblioteca de hilos
 LIBS = -lm -pthread
-EXE=p2_e0_a p2_e0_b p2_e1 p2_e2
+EXE=p2_e0_a p2_e0_b p2_e1 p2_e2 p2_e3_a p2_e3_b
 
 .PHONY : clean
 clean :
@@ -74,19 +74,33 @@ p2_e2.o: p2_e2.c
 	@echo "# Ha cambiado $<"
 	$(CC) -c -o $@ $< $(CFLAGS) $(IFLAGS)
 
-p2_e3: p2_e3.o element.o satck.o
+p2_e3_a: p2_e3_a.o element.o stack.o
 	@echo "#---------------------------"
 	@echo "# Generando $@ "
 	@echo "# Depende de $^"
 	@echo "# Ha cambiado $<"
-	$(CC) -o $@ $< $(LDFLAGS) $(LDLIBS) $(LIBS)
+	$(CC) $(CFLAGS) -o $@ $^ 
 
-p2_e3.o: p2_e3.c
+p2_e3_a.o: p2_e3_a.c 
 	@echo "#---------------------------"
 	@echo "# Generando $@ "
 	@echo "# Depende de $^"
 	@echo "# Ha cambiado $<"
-	$(CC) -c -o $@ $< $(CFLAGS) $(IFLAGS)
+	$(CC) $(CFLAGS) -c -o $@ $<  
+
+p2_e3_b: p2_e3_b.o element.o stack.o
+	@echo "#---------------------------"
+	@echo "# Generando $@ "
+	@echo "# Depende de $^"
+	@echo "# Ha cambiado $<"
+	$(CC) $(CFLAGS) -o $@ $^ 
+
+p2_e3_b.o: p2_e3_b.c 
+	@echo "#---------------------------"
+	@echo "# Generando $@ "
+	@echo "# Depende de $^"
+	@echo "# Ha cambiado $<"
+	$(CC) $(CFLAGS) -c -o $@ $< 
 
 node.o: node.c node.h
 	@echo "#---------------------------"
@@ -95,7 +109,7 @@ node.o: node.c node.h
 	@echo "# Ha cambiado $<"
 	$(CC) $(CFLAGS) -c $<	
 
-stack.o: stack.c stack.h
+stack.o: stack.c stack.h element.h
 	@echo "#---------------------------"
 	@echo "# Generando $@"
 	@echo "# Depende de $^"
@@ -125,6 +139,10 @@ ej2_test:
 	@echo Ejecutando p2_e2		
 	valgrind --tool=memcheck --leak-check=yes --leak-check=full --show-leak-kinds=all ./p2_e2 "((A+B)*(C+D))%E"
 
-ej3_test:
-	@echo Ejecutando p2_e3		
-	valgrind --tool=memcheck --leak-check=yes --leak-check=full --show-leak-kinds=all ./p2_e3
+ej3a_test:
+	@echo Ejecutando p2_e3_a		
+	valgrind --tool=memcheck --leak-check=yes --leak-check=full --show-leak-kinds=all ./p2_e3_a "This new Stack-library uses Elements"
+
+ej3b_test:
+	@echo Ejecutando p2_e3_b		
+	valgrind --tool=memcheck --leak-check=yes --leak-check=full --show-leak-kinds=all ./p2_e3_b

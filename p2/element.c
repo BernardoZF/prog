@@ -10,7 +10,7 @@ struct _Element {
 Element * element_init(){
     Element *e=NULL;
 
-    ele=(Element *)malloc(sizeof(Element));
+    e=(Element *)malloc(sizeof(Element));
     if(!e) return NULL;
 
     e->a = NULL;
@@ -26,25 +26,25 @@ void element_free(Element *e){
     return;
 }
 
-Element * element_setInfo(Element s, void c){
-  if(!s || !c) return NULL;
+Element * element_setInfo(Element *e, void *c){
+  if(!e || !c) return NULL;
 
-  if(s->a !=NULL) free(s->a);
+  if(e->a !=NULL) free(e->a);
 
-  s->a = (char *)malloc(sizeof(char));
+  e->a = (char *)malloc(sizeof(char));
   char *temp = (char *)c;
-  (*s->a)=(*temp);
+  (*e->a)=(*temp);
 
-  if(!s->a) return NULL;
+  if(!e->a) return NULL;
 
-  return s;
+  return e;
 
 }
 
 void * element_getInfo(Element *e){
     if(!e) return NULL;
 
-    return e;
+    return e->a;
 }
 
 Element * element_copy(const Element *e){
@@ -71,7 +71,7 @@ int element_print(FILE *f, const Element *e){
 
     if(!f || !e) return -1;
 
-    p=fprintf(f, "[%s]", e->a);
+    p=fprintf(f, "%c \n", *(char *)element_getInfo(e));
 
     if(!p) return -1;
 

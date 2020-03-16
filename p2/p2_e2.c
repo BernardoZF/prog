@@ -136,9 +136,9 @@ int main(int argc, char* argv[]){
     return -1;
   }
   strcpy(in, argv[1]);
-  fprintf(stdout, "Input: %s\n", argv[1]);
+  fprintf(stdout, "Input: %s\n", in);
 
-  infix2postfix(suf, argv[1]);
+  infix2postfix(suf, in);
   fprintf(stdout, "Output: %s\n", suf);
 
   return 0;

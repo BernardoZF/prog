@@ -3,15 +3,18 @@
 #include <string.h>
 #include "stack.h"
 #include "element.h"
+#include "types.h"
 
 #define MAXSTACK 1024
 
-struct _Stack {
+struct _Stack 
+{
     int top;
     Element * item[MAXSTACK];
 };
 
-Stack * stack_init (){
+Stack * stack_init ()
+{
     Stack *s = NULL;
     int i;
     s=(Stack *)malloc(sizeof(Stack));
@@ -26,7 +29,8 @@ Stack * stack_init (){
     return s;
 }
 
-void stack_free(Stack *s){
+void stack_free(Stack *s)
+{
     int i;
 
     if(!s) return;
@@ -40,7 +44,9 @@ void stack_free(Stack *s){
     return;
 
 }
-Status stack_push(Stack *s, const Element *e){
+
+Status stack_push(Stack *s, const Element *e)
+{
     if(!s || !e) return ERROR;
 
     if(stack_isFull(s) == TRUE) return ERROR;
@@ -54,7 +60,8 @@ Status stack_push(Stack *s, const Element *e){
     return OK;
 }
 
-Element * stack_pop(Stack *s){
+Element * stack_pop(Stack *s)
+{
     Element *e=NULL;
 
     if(!s) return NULL;
@@ -67,22 +74,37 @@ Element * stack_pop(Stack *s){
 
     return e;
 }
-Element * stack_top(const Stack *);
-Bool stack_isEmpty(const Stack *s){
+
+Element * stack_top(const Stack *s)
+{
+    int aux;
+
+    if(!s) return NULL;
+    aux = s->top -1;
+
+    return s->item[aux];
+}
+
+Bool stack_isEmpty(const Stack *s)
+{
     if(!s) return FALSE;
 
     if(s->top==0) return TRUE;
 
     return FALSE;
 }
-Bool stack_isFull(const Stack *s){
+
+Bool stack_isFull(const Stack *s)
+{
     if(!s) return FALSE;
 
     if(s->top==MAXSTACK) return TRUE;
 
     return FALSE;
 }
-int stack_print(FILE* f, const Stack* s){
+
+int stack_print(FILE* f, const Stack* s)
+{
     int i;
     int p=0;
 
@@ -90,7 +112,14 @@ int stack_print(FILE* f, const Stack* s){
 
     for(i=0; i<s->top; i++){
         p += element_print(f, s->item[i]);
-    }
+    }   
 
     return p;
+}
+
+int stack_size(const Stack * s)
+{
+    if(!s)return -1;
+
+    return s->top;
 }
