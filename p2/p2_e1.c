@@ -9,7 +9,7 @@
 char *reverseWords (char *strout, const char *strin);
 
 int main(){
-  char in[MAX_WORD], out[MAX_WORD];
+  char in[MAX_WORD]="in", out[MAX_WORD]="out";
 
   printf("Input: ");
   scanf("\n%[^\n]s", in);
@@ -31,14 +31,14 @@ int main(){
 **/
 char * reverseWords (char *strout, const char *strin){
   Stack *s = NULL;
+  char *car;
   int i, j=0;
   
   /*Inicializamos la pila y su correspondiente control de errores*/
   s = stack_init(char_free, char_copy, char_print);
   if(!s) return ERROR;
   
-  i = strlen(strin);
-  printf("%d", i);
+
   i = 0;
 
   /*Mediante este bucle damos la vuelta a cada palabra individualmente, cambiando
@@ -46,18 +46,23 @@ char * reverseWords (char *strout, const char *strin){
   for(i=0; strin[i] != '\0'; i++){
     if(strin[i] == ' '){
       while(stack_isEmpty(s) == FALSE){
-        strncpy(&strout[j], (char*)stack_pop(s), 1);
+        car = (char*)stack_pop(s);
+        strncpy(&strout[j], car, 1);
+        free(car);
         j++; 
       }
       strout[j] = ' ';
       j++;
+      i++;
     }
-    stack_push(s, &strin[i]);//Extraemos letra a letra de nuestra cadena
+    stack_push(s, &strin[i]);//Insertamos letra a letra de nuestra cadena
   }
   
   /*Mientras que la pila este llena, metemos las letras en nuestra cadena de salida*/
   while(stack_isEmpty(s) == FALSE){
-    strncpy(&strout[j], (char*)stack_pop(s), 1);
+    car = (char*)stack_pop(s);
+    strncpy(&strout[j], car, 1);
+    free(car);
     j++; 
   }
   
