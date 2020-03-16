@@ -124,3 +124,7 @@ ej1_test:
 ej2_test:
 	@echo Ejecutando p2_e2		
 	valgrind --tool=memcheck --leak-check=yes --leak-check=full --show-leak-kinds=all ./p2_e2 "((A+B)*(C+D))%E"
+
+ej3_test:
+	@echo Ejecutando p2_e3		
+	valgrind --tool=memcheck --leak-check=yes --leak-check=full --show-leak-kinds=all ./p2_e3
