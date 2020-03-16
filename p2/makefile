@@ -74,22 +74,35 @@ p2_e2.o: p2_e2.c
 	@echo "# Ha cambiado $<"
 	$(CC) -c -o $@ $< $(CFLAGS) $(IFLAGS)
 
+p2_e3: p2_e3.o element.o satck.o
+	@echo "#---------------------------"
+	@echo "# Generando $@ "
+	@echo "# Depende de $^"
+	@echo "# Ha cambiado $<"
+	$(CC) -o $@ $< $(LDFLAGS) $(LDLIBS) $(LIBS)
+
+p2_e3.o: p2_e3.c
+	@echo "#---------------------------"
+	@echo "# Generando $@ "
+	@echo "# Depende de $^"
+	@echo "# Ha cambiado $<"
+	$(CC) -c -o $@ $< $(CFLAGS) $(IFLAGS)
+
 node.o: node.c node.h
 	@echo "#---------------------------"
 	@echo "# Generando $@"
 	@echo "# Depende de $^"
 	@echo "# Ha cambiado $<"
-	$(CC) $(CFLAGS) -c $<
-	
+	$(CC) $(CFLAGS) -c $<	
 
-#stack.o: stack.c stack.h
+stack.o: stack.c stack.h
 	@echo "#---------------------------"
 	@echo "# Generando $@"
 	@echo "# Depende de $^"
 	@echo "# Ha cambiado $<"
 	$(CC) $(CFLAGS) -c $<
 	
-#element.o: element.c element.h
+element.o: element.c element.h
 	@echo "#---------------------------"
 	@echo "# Generando $@"
 	@echo "# Depende de $^"
