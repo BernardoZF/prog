@@ -61,7 +61,7 @@ long node_getId(const Node * n)
     return n->id;
 }
 
-const char* node_getName(Node *n)
+const char* node_getName(const Node *n)
 {
 
     if(!n)
@@ -75,7 +75,7 @@ int node_getConnect(const Node *n)
 
     if(!n)
         return -1;
-    
+
     return n->nConnect;
 }
 
@@ -104,7 +104,7 @@ Status node_setId(Node * n, const long id)
 
     if(!n || id < 0)
         return ERROR;
-    
+
     n->id=id;
     return OK;
 }
@@ -114,7 +114,7 @@ Status node_setName (Node * n, const char * name)
 
     if(!n || !name)
         return ERROR;
-    
+
     strcpy(n->name,name);
     return OK;
 }
@@ -162,7 +162,7 @@ void *node_copy (const void *src)
 {
     Node *cpy, *source;
 
-    
+
     if(!src)
         return NULL;
 
@@ -173,7 +173,7 @@ void *node_copy (const void *src)
     node_setName(cpy,node_getName(source));
     node_setNConnect(cpy, node_getConnect(source));
     node_setLabel(cpy, node_getLabel(source));
-    
+
     return cpy;
 }
 
