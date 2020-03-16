@@ -18,8 +18,6 @@ Stack * stack_init ();
 
 /**
 * @brief Esta funcion libera nuestra pila
-*
-* @return devuelve nuestra pila con la memoria que se reservo liberada
 */
 void stack_free(Stack *s);
 
