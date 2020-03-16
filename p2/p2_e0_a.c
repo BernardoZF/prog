@@ -3,33 +3,40 @@
 #include <string.h>
 #include "stack_fp.h"
 #include "stack_types.h"
+#define DIM_SIZE 3
 
 int main(){
-    char *car;
-    char array[3]={'a', 'b', 'c'};
-    Stack *s=NULL;
+    char *c;
+    char array[DIM_SIZE]={'a', 'b', 'c'};
+    Stack *stc=NULL;
     int i;
 
-    s=stack_init(char_free, char_copy, char_print);
+    /*Inicializamos nuestra pila y hacemos control de errores*/
+    stc=stack_init(char_free, char_copy, char_print);
     if(!s) return -1;
 
-    for(i=0; i<3; i++){
-        stack_push (s, &array[i]);
+    /*Extremos de la pila los elementos*/
+    for(i=0; i<DIM_SIZE; i++){
+        stack_push (stc, &array[i]);
     }
 
-    stack_print(stdout, s);
+    stack_print(stdout, stc);
+    
+    /*Imprimimos por pantalla el tamanio de la pila*/
+    fprintf(stdout, "Stack size: %ld\n", stack_size(stc));
 
-    fprintf(stdout, "Stack size: %ld\n", stack_size(s));
-
-    while(stack_isEmpty(s)==FALSE){
-      car = (char*)stack_pop(s);
-      fprintf(stdout, "El elemento extraido: %c\n", *car);
-      free(car);
+    /*Mientras que la pila no este llena, mostramos por pantalla los elementos extraidos*/
+    while(stack_isEmpty(stc)==FALSE){
+      c = (char*)stack_pop(stc);
+      fprintf(stdout, "El elemento extraido: %c\n", *c);
+      free(c);
     }
-
-    fprintf(stdout, "Stack size: %ld\n", stack_size(s));
-
-    stack_free(s);
+    
+    /*Imprimimos por pantalla el tamanio de la pila*/
+    fprintf(stdout, "Stack size: %ld\n", stack_size(stc));
+    
+    /*Liberamos la pila*/
+    stack_free(stc);
 
     return 0;
 }
