@@ -4,7 +4,7 @@
 #include "element.h"
 
 struct _Element {
-    char *x;
+    char *a;
 };
 
 Element * element_init(){
@@ -13,14 +13,14 @@ Element * element_init(){
     ele=(Element *)malloc(sizeof(Element));
     if(!e) return NULL;
 
-    e->x = NULL;
+    e->a = NULL;
 
     return e;
 }
 void element_free(Element *e){
     if(!e) return;
 
-    free(e->x);
+    free(e->a);
     free(e);
 
     return;
@@ -29,13 +29,13 @@ void element_free(Element *e){
 Element * element_setInfo(Element s, void c){
   if(!s || !c) return NULL;
 
-  if(s->x !=NULL) free(s->x);
+  if(s->a !=NULL) free(s->a);
 
-  s->x = (char *)malloc(sizeof(char));
+  s->a = (char *)malloc(sizeof(char));
   char *temp = (char *)c;
-  (*s->x)=(*temp);
+  (*s->a)=(*temp);
 
-  if(!s->x) return NULL;
+  if(!s->a) return NULL;
 
   return s;
 
@@ -53,7 +53,7 @@ Element * element_copy(const Element *e){
     s=element_init();
     if(!s) return NULL;
 
-    element_setInfo(s, e->x);
+    element_setInfo(s, e->a);
 
     return s;
 }
@@ -61,7 +61,7 @@ Element * element_copy(const Element *e){
 Bool element_equals(const Element *e1, const Element *e2){
     if(!e1 || !e2) return FALSE;
 
-    if(e1->x == e2->x) return TRUE;
+    if(e1->a == e2->a) return TRUE;
 
     return FALSE;
 }
@@ -71,7 +71,7 @@ int element_print(FILE *f, const Element *e){
 
     if(!f || !e) return -1;
 
-    p=fprintf(f, "[%s]", e->x);
+    p=fprintf(f, "[%s]", e->a);
 
     if(!p) return -1;
 
