@@ -40,12 +40,12 @@ void stack_free(Stack *s){
     return;
 
 }
-Status stack_push(Stack *s, const Element *ele){
-    if(!s || !ele) return ERROR;
+Status stack_push(Stack *s, const Element *e){
+    if(!s || !e) return ERROR;
 
     if(stack_isFull(s) == TRUE) return ERROR;
 
-    s->item[s->top] = element_copy(ele);
+    s->item[s->top] = element_copy(e);
 
     if(s->item[s->top] == NULL) return ERROR;
 
@@ -55,17 +55,17 @@ Status stack_push(Stack *s, const Element *ele){
 }
 
 Element * stack_pop(Stack *s){
-    Element *ele=NULL;
+    Element *e=NULL;
 
     if(!s) return NULL;
 
     if(stack_isEmpty(s)==TRUE) return NULL;
 
     s->top--;
-    ele=s->item[s->top];
+    e=s->item[s->top];
     s->item[s->top]=NULL;
 
-    return ele;
+    return e;
 }
 Element * stack_top(const Stack *);
 Bool stack_isEmpty(const Stack *s){
@@ -82,15 +82,15 @@ Bool stack_isFull(const Stack *s){
 
     return FALSE;
 }
-int stack_print(FILE* pf, const Stack* s){
+int stack_print(FILE* f, const Stack* s){
     int i;
-    int k=0;
+    int p=0;
 
-    if(!pf || !s) return 0;
+    if(!f || !s) return 0;
 
     for(i=0; i<s->top; i++){
-        k += element_print(pf, s->item[i]);
+        p += element_print(f, s->item[i]);
     }
 
-    return k;
+    return p;
 }
