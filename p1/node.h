@@ -81,7 +81,7 @@ const char* node_getName (const Node * n);
 * @return Returns the number of connections of a given node, or -1 in case
 * of error
 */
-int node_getConnect (const Node * n);
+int node_getNConnect (const Node * n);
 
 
 /**

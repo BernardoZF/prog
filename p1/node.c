@@ -70,7 +70,7 @@ const char* node_getName(const Node *n)
     return n->name;
 }
 
-int node_getConnect(const Node *n)
+int node_getNConnect(const Node *n)
 {
 
     if(!n)
@@ -171,7 +171,7 @@ void *node_copy (const void *src)
 
     node_setId(cpy, node_getId(source));
     node_setName(cpy,node_getName(source));
-    node_setNConnect(cpy, node_getConnect(source));
+    node_setNConnect(cpy, node_getNConnect(source));
     node_setLabel(cpy, node_getLabel(source));
 
     return cpy;
