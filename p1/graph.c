@@ -78,9 +78,8 @@ Status graph_insertNode (Graph *g, const Node *n)
         return ERROR;
     }
 
-   indx= find_node_index(g, node_getId(n))
-   if(indx==-1){
-		 fprintf(stdout, "Nodo ya en el grafo");
+   indx= find_node_index(g, node_getId(n));
+   if(indx== -1){
 		 return OK;
 	 }
 
@@ -258,12 +257,12 @@ int graph_getNumberOfConnectionsFrom (const Graph *g, const long fromId)
 long* graph_getConnectionsFrom (const Graph *g, const long fromId)
 {
   long *array = NULL;
-  int i, j=0, size;
+  int i, j=0, tam;
   if (!g) return NULL;
   if (fromId < 0 || fromId >g->num_nodes) return NULL;
 
-  size = node_getConnect (g->nodes[find_node_index(g,fromId)]);
-  array = (int *) malloc(sizeof(int) * size);
+  tam = node_getNConnect (g->nodes[find_node_index(g,fromId)]);
+  array = (int *) malloc(sizeof(int) * tam);
   if (!array) {
 
   fprintf (stderr, "%s\n", strerror(errno));
