@@ -11,7 +11,7 @@
 */
 
 
-
+#include "node.h"
 #include "graph.h"
 #define MAX_NODES 1064
 #define MAX_LINE 1000
@@ -79,9 +79,14 @@ Status graph_insertNode (Graph *g, const Node *n)
     }
 
    indx= find_node_index(g, node_getId(n));
+<<<<<<< HEAD
    if(indx==-1){
 		 fprintf(stdout, "Nodo ya en el grafo");
 		 return OK;
+=======
+   if(indx != -1){
+		 return ERROR;
+>>>>>>> 9762b19697ec4ccf5fb6fb4ddb77bc7a1d6ca81a
 	 }
 
     g->nodes[g->num_nodes]=node_copy(n);
@@ -114,7 +119,6 @@ Status graph_insertEdge (Graph *g, const long nId1, const long nId2)
 	indx2 = find_node_index(g, nId2);
 
 	if (indx1 == -1 || indx2 == -1){
-		fprintf(stderr, "Error al buscar el indice del nodo.\n");
 		return OK;
 	}
 
@@ -257,15 +261,19 @@ int graph_getNumberOfConnectionsFrom (const Graph *g, const long fromId)
 long* graph_getConnectionsFrom (const Graph *g, const long fromId)
 {
   long *array = NULL;
-  int i, j=0, size;
+  int i, j=0, tam;
   if (!g) return NULL;
   if (fromId < 0 || fromId >g->num_nodes) return NULL;
 
+<<<<<<< HEAD
   size = node_getNConnect (g->nodes[find_node_index(g,fromId)]);
   array = (long *) malloc(sizeof(long) * size);
+=======
+  tam = node_getNConnect (g->nodes[find_node_index(g,fromId)]);
+  array = (long *) malloc(sizeof(int) * tam);
+>>>>>>> 9762b19697ec4ccf5fb6fb4ddb77bc7a1d6ca81a
   if (!array) {
-
-  fprintf (stderr, "%s\n", strerror(errno));
+    fprintf(stderr, "Error en reserva de memoria");
   return NULL;
   }
 
@@ -291,7 +299,11 @@ int graph_print (FILE *pf, const Graph *g)
         return -1;
 
     for(i = 0; i < g->num_nodes; i++){
+<<<<<<< HEAD
         ret += node_print(stdout, g->nodes[i]);
+=======
+        ret += node_print(pf, g->nodes[i]);
+>>>>>>> 9762b19697ec4ccf5fb6fb4ddb77bc7a1d6ca81a
 
         a = find_node_index(g, node_getId(g->nodes[i]));
         conn = graph_getConnectionsIndex(g, a);
