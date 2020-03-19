@@ -79,14 +79,13 @@ Status graph_insertNode (Graph *g, const Node *n)
     }
 
    indx= find_node_index(g, node_getId(n));
-<<<<<<< HEAD
+
    if(indx==-1){
 		 fprintf(stdout, "Nodo ya en el grafo");
 		 return OK;
-=======
    if(indx != -1){
 		 return ERROR;
->>>>>>> 9762b19697ec4ccf5fb6fb4ddb77bc7a1d6ca81a
+
 	 }
 
     g->nodes[g->num_nodes]=node_copy(n);
