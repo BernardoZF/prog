@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "Queue.h"
+#include "queue_fp.h"
 #include "graph.h"
 #include "node.h"
 #include "types.h"

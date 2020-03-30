@@ -1,21 +1,21 @@
 CC = gcc -ansi -pedantic
 CFLAGS = -Wall
-EXE = p3_e1 
+EXE = p3_e1
 
 all : $(EXE)
 
 .PHONY : clean
 clean :
-	rm -f *.o core $(EXE) 
+	rm -f *.o core $(EXE)
 
-$(EXE) : % : %.o node.o graph.o Queue.o
+$(EXE) : % : %.o node.o graph.o queue_fp.o
 	@echo "#---------------------------"
 	@echo "# Generando $@ "
 	@echo "# Depende de $^"
 	@echo "# Ha cambiado $<"
-	$(CC) $(CFLAGS) -o $@ $@.o node.o graph.o Queue.o
+	$(CC) $(CFLAGS) -o $@ $@.o node.o graph.o queue_fp.o
 
-Queue.o: Queue.c Queue.H
+queue_fp.o: queue_fp.c queue_fp.h
 	@echo "#---------------------------"
 	@echo "# Generando $@"
 	@echo "# Depende de $^"
@@ -41,4 +41,3 @@ graph.o : graph.c graph.h
 p3_e1_test:
 	@echo Ejecutando p1_e1
 	@valgrind --leak-check=full --show-leak-kinds=all ./p3_e1 g3.txt
-

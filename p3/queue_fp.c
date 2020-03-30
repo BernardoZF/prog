@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "Queue.h"
+#include "queue_fp.h"
 #define MAXQUEUE 1024
 
 /* ----------- queue.c -------------- */
@@ -18,7 +18,7 @@ struct _Queue {
 
 Queue *queue_init (free_element_function_type fd,
 copy_element_function_type fc,
-print_element_function_type fp) 
+print_element_function_type fp)
 {
     Queue *q = NULL;
     int i;
@@ -67,7 +67,7 @@ Bool queue_isEmpty(const Queue *q)
 {
     if(!q)
         return FALSE;
-    if(q->front == q->rear){ 
+    if(q->front == q->rear){
         return TRUE;
     }
     return FALSE;
@@ -79,16 +79,16 @@ Status queue_insert(Queue *q, const void* pElem)
 {
     if(!q || !pElem)
         return ERROR;
-    
+
     if (q->size == (MAXQUEUE - 1)){
         fprintf(stderr, "ERROR, COLA LLENA");
-        return ERROR; 
+        return ERROR;
     }
 
     q->items[q->rear] = q->fc(pElem);
         if(q->items[q->rear]==NULL){
             fprintf(stderr, "ERROR AL COPIAR EL ELEMENTO");
-            return ERROR; 
+            return ERROR;
         }
     q->rear = (q->rear + 1) % MAXQUEUE;
     q->size++;
@@ -140,4 +140,3 @@ int queue_print(FILE *pf, const Queue *q)
 
     return ret;
 }
-
