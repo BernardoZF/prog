@@ -10,7 +10,10 @@
 @see
 */
 
-
+#include <errno.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 #include "node.h"
 #include "graph.h"
 #define MAX_NODES 1064
@@ -174,7 +177,7 @@ Status graph_setNode (Graph *g, const Node *n)
         g->nodes[indx]=aux;
         return ERROR;
     }
-	
+
     node_free(aux);
 
 	return OK;

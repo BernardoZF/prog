@@ -1,10 +1,6 @@
 #ifndef QUEUE_H
 #define QUEUE_H
 #include "types.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <errno.h>
-#include <string.h>
 
 /**
 * @brief Structure to implement a queue. To be defined in queue_fp.c

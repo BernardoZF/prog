@@ -12,12 +12,8 @@
 #ifndef GRAPH_H
 #define GRAPH_H
 #include "node.h"
-#include <errno.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
 typedef struct _Graph Graph;
-  
+
 
 
 /**
@@ -76,7 +72,7 @@ Status graph_setNode (Graph *g, const Node *n);
 * @brief Returns the address of an array with the ids of all nodes in the graph.
 * Reserves memory for the array.
 * @param g Pointer to the graph
-* @return Returns the address of an array with the ids of all nodes in the graph or NULL if 
+* @return Returns the address of an array with the ids of all nodes in the graph or NULL if
 **/
 long * graph_getNodesId (const Graph *g);
 
@@ -117,7 +113,7 @@ int graph_getNumberOfConnectionsFrom (const Graph *g, const long fromId);
 /**
 * @brief Returns an array with the id of the nodes connected to a given node. Allocates memory * @param g The graph
 * @param fromId The id of the given node
-* @return Returns the number of connections from the id node fromId or -1 if there are any 
+* @return Returns the number of connections from the id node fromId or -1 if there are any
 */
 long* graph_getConnectionsFrom (const Graph *g, const long fromId);
 
