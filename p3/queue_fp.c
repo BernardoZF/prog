@@ -18,13 +18,13 @@ struct _Queue {
 };
 
 
-Queue *queue_init (free_element_function_type fd,
-copy_element_function_type fc,
-print_element_function_type fp)
+Queue *queue_init (free_element_function_type fn_d,
+copy_element_function_type fn_c,
+print_element_function_type fn_p)
 {
     Queue *q = NULL;
     int i;
-    if (!fd || !fc || !fp) return NULL;
+    if (!fn_d || !fn_c || !fn_p) return NULL;
     q =(Queue *) malloc (sizeof (Queue));
     if (!q) {
         fprintf(stderr, "%s", strerror(errno));
@@ -32,9 +32,9 @@ print_element_function_type fp)
     }
 
     /*Assign pointer functions*/
-    q->fc = fc;
-    q->fd = fd;
-    q->fp = fp;
+    q->fc = fn_c;
+    q->fd = fn_d;
+    q->fp = fn_p;
 
     /*Assign array pointers*/
     for (i=0; i < MAXQUEUE; i++)
@@ -113,7 +113,6 @@ void * queue_extract(Queue *q){
     q->items[q->front]=NULL;
 
     q->front = (q->front + 1) % MAXQUEUE;
-    q->size--;
 
     return aux;
 }
