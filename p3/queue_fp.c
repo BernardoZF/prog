@@ -114,6 +114,8 @@ void * queue_extract(Queue *q){
 
     q->front = (q->front + 1) % MAXQUEUE;
 
+    q->size--;
+
     return aux;
 }
 

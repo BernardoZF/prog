@@ -1,6 +1,6 @@
 CC = gcc -ansi -pedantic
 CFLAGS = -Wall
-EXE = p3_e1
+EXE = p3_e1 p3_e2
 
 all : $(EXE)
 
@@ -39,5 +39,9 @@ graph.o : graph.c graph.h
 
 
 p3_e1_test:
-	@echo Ejecutando p1_e1
+	@echo Ejecutando p3_e1
 	@valgrind --leak-check=full --show-leak-kinds=all ./p3_e1 g3.txt
+
+p3_e2_test:
+	@echo Ejecutando p3_e2
+	@valgrind --leak-check=full --show-leak-kinds=all ./p3_e2 g2_s.txt 1 4

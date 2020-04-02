@@ -14,7 +14,8 @@ typedef enum {
 */
 typedef enum {
     ERROR=0, /*!< To codify an ERROR output */
-    OK=1 /*!< OK output */
+    OK=1, /*!< OK output */
+    END=2
 } Status;
 
 #endif /* TYPES_H_ */
