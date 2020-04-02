@@ -5,7 +5,6 @@
 #include "graph.h"
 #include "node.h"
 #include "types.h"
-
 #define MAXSTRING 65536
 #define MAXNAME 64
 
@@ -18,6 +17,7 @@
 * This parameter is modified by the function.
 * @return, OK or ERROR if any pointer is NULL
 ****/
+
 Status graph_breadthFirst (Graph *pg, long ini_id, long end_id,
 char *nodestraversed)
 {
@@ -39,13 +39,13 @@ char *nodestraversed)
   if(!q){
     return ERROR;
   }
-
+ /*Obtenemos los ids de los nodos del gtafo*/
   nodesId=graph_getNodesId(pg);
   if(nodesId == NULL){
     queue_free(q);
     return ERROR;
   }
-
+  /*Bucle para recorrer todos los nodos del grafo etiquetando todos en blanco menos el del inicio*/
   for(i=0;i<graph_getNumberOfNodes(pg); i++){
       n=graph_getNode(pg,nodesId[i]);
       if(n==NULL){
@@ -53,7 +53,9 @@ char *nodestraversed)
         return ERROR;
       }
       node_setLabel(n, WHITE);
+      /*Comprobamos si el id del nodo es igual al nodo inicial*/
       if(node_getId(n)==ini_id){
+        /*Si esto es asi, cambiamos la etiqueta a negro y lo insertamos en la cola*/
         node_setLabel(n, BLACK);
         flag=queue_insert(q, (void *)n);
         if(flag==ERROR){
@@ -66,36 +68,43 @@ char *nodestraversed)
       node_free(n);
     }
     free(nodesId);
-
+    /*Mientras la cola no este vacia y el nodo extraido no sea el del final*/
     while(queue_isEmpty(q) == FALSE && flag != END){
+      /*Extraemos nodo*/
       n=(Node *)queue_extract(q);
       if(n == NULL){
         queue_free(q);
         return ERROR;
       }
+      /*Obtenemos su nombre*/
       strcpy(s, node_getName(n));
+      /*Lo insertamos en la cadena ujunto a una tabulacion*/
       strcat(nodestraversed, s);
       strcat(nodestraversed, tab);
 
+      /*Comprobamos si el nodo que acabamos de extraer es el final*/
       if(node_getId(n) == end_id){
-        flag = END;
+        flag = END; /*Si lo es establecemos falg a END y acabarian los procesos relevamntes del bucle*/
       }
       else {
-        ids=graph_getConnectionsFrom(pg, node_getId(n));
-        numcon = graph_getNumberOfConnectionsFrom(pg, node_getId(n));
+        ids=graph_getConnectionsFrom(pg, node_getId(n));/*Si no obtenemos los adyacentes del nodo*/
+        numcon = graph_getNumberOfConnectionsFrom(pg, node_getId(n));/*Obtenemos el numero de conexiones*/
         for(i=0;i<numcon;i++){
           node_free(n);
-          n=graph_getNode(pg, ids[i]);
+          n=graph_getNode(pg, ids[i]);/*Vamos obteniendo los nodos*/
           if(!n){
             queue_free(q);
             return ERROR;
           }
           if(node_getLabel(n) == WHITE){
+            /*Si no se han visitado lo establecemos como visitados*/
             node_setLabel(n,  BLACK);
+            /*Lo insertamos en la  cola*/
             if(queue_insert(q, n) == ERROR){
               queue_free(q);
               return ERROR;
             }
+            /*Actualizamos el grafo estableciendo el nodo como visitado*/
             graph_setNode(pg , n);
           }
         }
@@ -154,7 +163,6 @@ int main(int argc, char* argv[])
   }
 
   fprintf(stdout, "%s\n", nt);
-
 
   graph_free(g);
   fclose(pf);
