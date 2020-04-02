@@ -135,6 +135,11 @@ int queue_print(FILE *pf, const Queue *q)
         return -1;
     }
 
+    if(queue_isEmpty(q)==TRUE){
+      fprintf(stderr, "ERROR, COLA VACIA\n");
+      return -1;
+    }
+
     for(i=0;i<q->size;i++){
         ret+=q->fp(pf, q->items[i]);
     }

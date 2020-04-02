@@ -51,8 +51,20 @@ int main(int argc, char* argv[]){
     }
 
     ids=graph_getNodesId(g);
+    if(ids==NULL){
+      fprintf(stderr, "Error al obtener los ids de los nodos\n");
+      graph_free(g);
+      return -1;
+    }
     for(i=0;i<graph_getNumberOfNodes(g); i++){
         n=graph_getNode(g,ids[i]);
+        if(n==NULL){
+          fprintf(stderr, "Error al obtener el nodo del grafo\n");
+          graph_free(g);
+          node_free(n);
+          free(ids);
+          return -1;
+        }
         node_setLabel(n, BLACK);
         graph_setNode(g, n);
 

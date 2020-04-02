@@ -14,7 +14,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+#define NAME_L 64
 
  struct _Node{
     char name [NAME_L]; /*!<Node name */
