@@ -10,13 +10,14 @@ struct _Queue {
     void* items [MAXQUEUE];
     int front;
     int rear;
-    int size;
 
     free_element_function_type fd;
     copy_element_function_type fc;
     print_element_function_type fp;
 };
-
+/********************PRIVATE FUNCTIONS************************/
+Bool queue_isFull(const Queue *q);
+/*************************************************************/
 
 Queue *queue_init (free_element_function_type fn_d,
 copy_element_function_type fn_c,
@@ -41,7 +42,6 @@ print_element_function_type fn_p)
         q->items[i] = NULL;
 
     q->front = q->rear = 0;
-    q->size = 0;
 
     return q;
 }
@@ -82,7 +82,7 @@ Status queue_insert(Queue *q, const void* pElem)
     if(!q || !pElem)
         return ERROR;
 
-    if (q->size == (MAXQUEUE - 1)){
+    if (queue_isFull(q) == TRUE){
         fprintf(stderr, "ERROR, COLA LLENA");
         return ERROR;
     }
@@ -93,7 +93,6 @@ Status queue_insert(Queue *q, const void* pElem)
             return ERROR;
         }
     q->rear = (q->rear + 1) % MAXQUEUE;
-    q->size++;
 
     return OK;
 }
@@ -114,7 +113,6 @@ void * queue_extract(Queue *q){
 
     q->front = (q->front + 1) % MAXQUEUE;
 
-    q->size--;
 
     return aux;
 }
@@ -124,13 +122,18 @@ int queue_size (const Queue *q)
 {
     if(!q)
         return -1;
-    return q->size;
+    if(q->rear >= q->front ){
+      return (q->rear - q->front);
+    }
+
+    return (MAXQUEUE - (q->front - q->rear));
 }
 
 
 int queue_print(FILE *pf, const Queue *q)
 {
     int i;
+    int tam;
     int ret = 0;
     if(!pf || !q){
         fprintf(stderr, "ERROR EN LA IMPRESION\n");
@@ -142,9 +145,22 @@ int queue_print(FILE *pf, const Queue *q)
       return -1;
     }
 
-    for(i=0;i<q->size;i++){
+    tam=queue_size(q);
+    for(i=0;i<tam;i++){
         ret+=q->fp(pf, q->items[i]);
     }
 
     return ret;
+}
+
+
+Bool  queue_isFull(const Queue *q){
+  int aux;
+  if(!q)
+      return FALSE;
+  aux = (q->rear + 1) % MAXQUEUE;
+  if(q->front == aux){
+        return TRUE;
+      }
+      return FALSE;
 }

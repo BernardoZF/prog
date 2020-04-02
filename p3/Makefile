@@ -44,4 +44,4 @@ p3_e1_test:
 
 p3_e2_test:
 	@echo Ejecutando p3_e2
-	@valgrind --leak-check=full --show-leak-kinds=all ./p3_e2 g2_s.txt 1 4
+	@valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./p3_e2 g2_s.txt 1 4

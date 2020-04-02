@@ -21,12 +21,15 @@
 Status graph_breadthFirst (Graph *pg, long ini_id, long end_id,
 char *nodestraversed)
 {
-  Queue * q;
-  Node * n;
+  Queue * q = NULL;
+  Node * n = NULL;
   int flag = ERROR;
   int i;
-  char s[MAXNAME];
+  int numcon = 0;
+  char s[MAXNAME]="";
+  char tab[MAXNAME] = "\t";
   long *ids=NULL;
+  long *nodesId = NULL;
 
   if(!pg || ini_id==-1 || end_id==-1){
       return ERROR;
@@ -36,10 +39,18 @@ char *nodestraversed)
   if(!q){
     return ERROR;
   }
+
+  nodesId=graph_getNodesId(pg);
+  if(nodesId == NULL){
+    queue_free(q);
+    return ERROR;
+  }
+
   for(i=0;i<graph_getNumberOfNodes(pg); i++){
-      n=graph_getNode(pg,ids[i]);
+      n=graph_getNode(pg,nodesId[i]);
       if(n==NULL){
         queue_free(q);
+        return ERROR;
       }
       node_setLabel(n, WHITE);
       if(node_getId(n)==ini_id){
@@ -54,7 +65,7 @@ char *nodestraversed)
       graph_setNode(pg, n);
       node_free(n);
     }
-
+    free(nodesId);
 
     while(queue_isEmpty(q) == FALSE && flag != END){
       n=(Node *)queue_extract(q);
@@ -64,20 +75,31 @@ char *nodestraversed)
       }
       strcpy(s, node_getName(n));
       strcat(nodestraversed, s);
-      strcat(nodestraversed, "\t");
+      strcat(nodestraversed, tab);
 
       if(node_getId(n) == end_id){
         flag = END;
       }
       else {
         ids=graph_getConnectionsFrom(pg, node_getId(n));
-        for(i=0;i<graph_getNumberOfConnectionsFrom(pg, node_getId(n));i++){
+        numcon = graph_getNumberOfConnectionsFrom(pg, node_getId(n));
+        for(i=0;i<numcon;i++){
           node_free(n);
           n=graph_getNode(pg, ids[i]);
+          if(!n){
+            queue_free(q);
+            return ERROR;
+          }
           if(node_getLabel(n) == WHITE){
-            queue_insert(q, n);
+            node_setLabel(n,  BLACK);
+            if(queue_insert(q, n) == ERROR){
+              queue_free(q);
+              return ERROR;
+            }
+            graph_setNode(pg , n);
           }
         }
+        free(ids);
       }
       node_free(n);
     }
@@ -85,12 +107,13 @@ char *nodestraversed)
     return OK;
 }
 
-int main(int argc, char* argv[]){
+int main(int argc, char* argv[])
+{
 
   Graph *g;
   long ini_id;
   long end_id;
-  char nt[MAXSTRING];
+  char nt[MAXSTRING]="";
   FILE *pf;
   int flag;
 
@@ -125,11 +148,16 @@ int main(int argc, char* argv[]){
 
   if(graph_breadthFirst(g, ini_id, end_id, nt)==ERROR){
     fprintf(stderr, "ERROR en la funcion\n");
+    fclose(pf);
     graph_free(g);
     return -1;
   }
 
   fprintf(stdout, "%s\n", nt);
+
+
+  graph_free(g);
+  fclose(pf);
 
   return 0;
 }

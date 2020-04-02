@@ -147,8 +147,8 @@ Status graph_insertEdge (Graph *g, const long nId1, const long nId2)
 
 Node *graph_getNode (const Graph *g, long nId)
 {
-    int indx;
-    Node *n;
+    int indx=-1;
+    Node *n=NULL;
 
     if(!g||nId<0)
         return NULL;
@@ -269,7 +269,7 @@ long* graph_getConnectionsFrom (const Graph *g, const long fromId)
   if (fromId < 0 || fromId >g->num_nodes) return NULL;
 
   tam = node_getNConnect (g->nodes[find_node_index(g,fromId)]);
-  array = (long *) malloc(sizeof(int) * tam);
+  array = (long *) malloc(sizeof(long) * tam);
   if (!array) {
     fprintf(stderr, "Error en reserva de memoria");
   return NULL;
