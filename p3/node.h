@@ -14,8 +14,6 @@
 #ifndef NODE_H_
 #define NODE_H_
 #include "types.h"
-#include <stdio.h>
-#include <stdlib.h>
 
 
 /**
