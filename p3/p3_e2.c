@@ -3,8 +3,6 @@
 #include <string.h>
 #include "queue_fp.h"
 #include "graph.h"
-#include "node.h"
-#include "types.h"
 #define MAXSTRING 65536
 #define MAXNAME 64
 
