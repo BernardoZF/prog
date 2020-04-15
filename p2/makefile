@@ -9,8 +9,8 @@ EXE=p2_e0_a p2_e0_b p2_e1 p2_e2 p2_e3_a p2_e3_b
 
 .PHONY : clean
 clean :
-	rm -f *.o core $(EXE) 
-	
+	rm -f *.o core $(EXE)
+
 all:$(EXE)
 ######################################################################
 # $@ es el item que aparece a la izquierda de ':'
@@ -58,7 +58,7 @@ p2_e1.o: p2_e1.c
 	@echo "# Depende de $^"
 	@echo "# Ha cambiado $<"
 	$(CC) -c -o $@ $< $(CFLAGS) $(IFLAGS)
-	
+
 
 p2_e2: p2_e2.o libstack_fp.a
 	@echo "#---------------------------"
@@ -79,35 +79,35 @@ p2_e3_a: p2_e3_a.o element.o stack.o
 	@echo "# Generando $@ "
 	@echo "# Depende de $^"
 	@echo "# Ha cambiado $<"
-	$(CC) $(CFLAGS) -o $@ $^ 
+	$(CC) $(CFLAGS) -o $@ $^
 
-p2_e3_a.o: p2_e3_a.c 
+p2_e3_a.o: p2_e3_a.c
 	@echo "#---------------------------"
 	@echo "# Generando $@ "
 	@echo "# Depende de $^"
 	@echo "# Ha cambiado $<"
-	$(CC) $(CFLAGS) -c -o $@ $<  
+	$(CC) $(CFLAGS) -c -o $@ $<
 
 p2_e3_b: p2_e3_b.o element.o stack.o
 	@echo "#---------------------------"
 	@echo "# Generando $@ "
 	@echo "# Depende de $^"
 	@echo "# Ha cambiado $<"
-	$(CC) $(CFLAGS) -o $@ $^ 
+	$(CC) $(CFLAGS) -o $@ $^
 
-p2_e3_b.o: p2_e3_b.c 
+p2_e3_b.o: p2_e3_b.c
 	@echo "#---------------------------"
 	@echo "# Generando $@ "
 	@echo "# Depende de $^"
 	@echo "# Ha cambiado $<"
-	$(CC) $(CFLAGS) -c -o $@ $< 
+	$(CC) $(CFLAGS) -c -o $@ $<
 
 node.o: node.c node.h
 	@echo "#---------------------------"
 	@echo "# Generando $@"
 	@echo "# Depende de $^"
 	@echo "# Ha cambiado $<"
-	$(CC) $(CFLAGS) -c $<	
+	$(CC) $(CFLAGS) -c $<
 
 stack.o: stack.c stack.h element.h
 	@echo "#---------------------------"
@@ -115,7 +115,7 @@ stack.o: stack.c stack.h element.h
 	@echo "# Depende de $^"
 	@echo "# Ha cambiado $<"
 	$(CC) $(CFLAGS) -c $<
-	
+
 element.o: element.c element.h
 	@echo "#---------------------------"
 	@echo "# Generando $@"
@@ -136,13 +136,13 @@ ej1_test:
 	valgrind --tool=memcheck --leak-check=yes --leak-check=full --show-leak-kinds=all ./p2_e1
 
 ej2_test:
-	@echo Ejecutando p2_e2		
+	@echo Ejecutando p2_e2
 	valgrind --tool=memcheck --leak-check=yes --leak-check=full --show-leak-kinds=all ./p2_e2 "((A+B)*(C+D))%E"
 
 ej3a_test:
-	@echo Ejecutando p2_e3_a		
+	@echo Ejecutando p2_e3_a
 	valgrind --tool=memcheck --leak-check=yes --leak-check=full --show-leak-kinds=all ./p2_e3_a "This new Stack-library uses Elements"
 
 ej3b_test:
-	@echo Ejecutando p2_e3_b		
+	@echo Ejecutando p2_e3_b
 	valgrind --tool=memcheck --leak-check=yes --leak-check=full --show-leak-kinds=all ./p2_e3_b
