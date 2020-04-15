@@ -10,10 +10,10 @@
 @see
 */
 
+#include "node.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "node.h"
 #define NAME_L 64
 
  struct _Node{
@@ -21,6 +21,7 @@
     long id;            /*!<Node id*/
     int nConnect;       /*!<Node number of connections*/
     Label label;        /*!<Node state*/
+    long predecessorid; /*!<Node predecessor Id */
 };
 
 
@@ -39,6 +40,7 @@ Node * node_init()
     n->id=-1;
     n->nConnect=0;
     n->label=WHITE;
+    n->predecessorid = -1;
 
     return n;
 }
@@ -88,6 +90,24 @@ Label node_getLabel(const Node * n)
     return n->label;
 }
 
+
+long node_getPredecessorId (const Node * n)
+{
+  if(!n) return -1;
+
+  return n->predecessorid;
+}
+
+
+Status node_setPredecessorId (Node * n, long predid)
+{
+  if(!n || predid == -1){
+    return ERROR;
+  }
+
+    n->predecessorid = predid;
+    return OK;
+}
 Status node_setLabel(Node *n, Label l)
 {
 
@@ -98,6 +118,7 @@ Status node_setLabel(Node *n, Label l)
 
     return OK;
 }
+
 
 Status node_setId(Node * n, const long id)
 {
@@ -174,6 +195,7 @@ void *node_copy (const void *src)
     node_setName(cpy,node_getName(source));
     node_setNConnect(cpy, node_getNConnect(source));
     node_setLabel(cpy, node_getLabel(source));
+    node_setPredecessorId(cpy, node_getPredecessorId(source));
 
     return cpy;
 }
@@ -184,13 +206,13 @@ int node_print(FILE *pf, const void *n)
     int chars=-1;
 
     if(!pf || !n){
-        fprintf(stdout, "Error while printing the node");
+        fprintf(stdout, "Error while printing the node\n");
         return -1;
     }
 
     n1=(Node *)n;
 
-    chars=fprintf(pf, "[%ld, %s, %d, %d]", n1->id, n1->name, n1->label, n1->nConnect);
+    chars=fprintf(pf, "[%ld, %s, %d, %d, %ld]", n1->id, n1->name, n1->label, n1->nConnect, n1->predecessorid);
 
     return chars;
 }

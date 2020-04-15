@@ -14,6 +14,8 @@
 #ifndef NODE_H_
 #define NODE_H_
 #include "types.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 
 /**
@@ -87,8 +89,24 @@ int node_getNConnect (const Node * n);
 * @param Node address
 * @return Returns the label of a given node, or -1 in case of error
 */
-Label node_getLabel (const Node*n);
+Label node_getLabel (const Node* n);
 
+
+/**
+* @brief Gets the predecessor id of a given node.
+* @param Node address
+* @return Returns the predecessor id of a given node, or -1 in case of error
+*/
+long node_getPredecessorId (const Node * n);
+
+
+/**
+* @brief Modifies the label of a given node
+* @param Node address
+* @apram predid new predecessor id
+* @return Returns OK or ERROR in case of error
+*/
+Status node_setPredecessorId (Node * n, long predid);
 
 /**
 * @brief Modifies the label of a given node
