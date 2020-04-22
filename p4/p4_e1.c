@@ -100,8 +100,8 @@ int main(int argc, char* argv[])
   }
 
   list_print(stdout, lout);
-  fprintf(stdout, "size: %d\n", list_size(lout));
-
+  fprintf(stdout, "size: %d\n\n", list_size(lout));
+  
   list_free(l1);
   list_free(l2);
   list_free(lout);
