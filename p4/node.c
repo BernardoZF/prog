@@ -10,11 +10,11 @@
 @see
 */
 
-#include "node.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+#include "node.h"
 #define NAME_L 64
 
  struct _Node{

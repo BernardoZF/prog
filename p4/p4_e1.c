@@ -43,6 +43,10 @@ typedef int (*f_cmp_type)(const void *, const void*);
 **/
 Status listMergeOrdered (List *l1, List *l2, List *lout, f_cmp_type fun);
 
+void cleanup(List *l1, List *l2, List *lout);
+
+void cleanfun(Stack *s1, Stack *s2);
+
 int main(int argc, char* argv[])
 {
 
@@ -74,37 +78,59 @@ int main(int argc, char* argv[])
 
   num_ele = atoi(argv[1]);
   if(listOfRandomOrdered(num_ele, l1) == ERROR){
-    list_free(l1);
-    list_free(l2);
-    list_free(lout);
+    cleanup(l1, l2, lout);
     return -1;
   }
+
+  /**
+  * Impresion de las listas antes de ejecutar el codigo
+  */
+  fprintf (stdout, "input l1: [");
   list_print(stdout, l1);
-  fprintf(stdout, "size: %d\n\n", list_size(l1));
+  fprintf(stdout, "] size: %d\n\n", list_size(l1));
 
   if(listOfRandomOrdered(num_ele, l2) == ERROR){
-    list_free(l1);
-    list_free(l2);
-    list_free(lout);
+      cleanup(l1, l2, lout);
     return -1;
   }
+
+  /**
+  * Impresion de las listas antes de ejecutar el codigo
+  */
+  fprintf (stdout, "input l2: [");
   list_print(stdout, l2);
-  fprintf(stdout, "size: %d\n\n", list_size(l2));
+  fprintf(stdout, "] size: %d\n\n", list_size(l2));
+
+  /**
+  * Impresion de las listas antes de ejecutar el codigo
+  */
+  fprintf (stdout, "input lout: [");
+  list_print(stdout, lout);
+  fprintf(stdout, "] size: %d\n\n", list_size(lout));
+
 
   if(listMergeOrdered(l1, l2, lout, int_cmp)==ERROR){
     fprintf(stderr, "ERROR EN LA FUNCION\n");
-    list_free(l1);
-    list_free(l2);
-    list_free(lout);
+      cleanup(l1, l2, lout);
     return -1;
   }
 
+  /**
+  * Impresion de las listas despues de ejecutar la funcion
+  */
+  fprintf (stdout, "output l1: [");
+  list_print(stdout, l1);
+  fprintf(stdout, "] size: %d\n\n", list_size(l1));
+
+  fprintf (stdout, "output l2: [");
+  list_print(stdout, l2);
+  fprintf(stdout, "] size: %d\n\n", list_size(l2));
+
+  fprintf (stdout, "output lout: [");
   list_print(stdout, lout);
-  fprintf(stdout, "size: %d\n\n", list_size(lout));
-  
-  list_free(l1);
-  list_free(l2);
-  list_free(lout);
+  fprintf(stdout, "] size: %d\n\n", list_size(lout));
+
+  cleanup(l1, l2, lout);
 
 return 0;
 }
@@ -121,13 +147,20 @@ Status listMergeOrdered (List *l1, List *l2, List *lout, f_cmp_type fun)
   if(!l1 || !l2 || !lout || !fun ) return ERROR;
 
   s1 = stack_init (int_free, int_copy, int_print);
+  if(!s1){
+    return ERROR;
+  }
+
   s2 = stack_init (int_free, int_copy, int_print);
+  if(!s2){
+    stack_free(s1);
+    return ERROR;
+   }
 
   while (list_isEmpty (l1) == FALSE) {
       ele = list_popFront (l1);
       if(!ele ){
-        stack_free(s1);
-        stack_free(s2);
+        cleanfun(s1, s2);
         return ERROR;
       }
       stack_push (s1, ele);
@@ -137,8 +170,7 @@ Status listMergeOrdered (List *l1, List *l2, List *lout, f_cmp_type fun)
   while (list_isEmpty (l2) == FALSE ){
     ele = list_popFront (l2);
     if(!ele ){
-      stack_free(s1);
-      stack_free(s2);
+      cleanfun(s1, s2);
       return ERROR;
     }
     stack_push (s2, ele);
@@ -150,8 +182,7 @@ Status listMergeOrdered (List *l1, List *l2, List *lout, f_cmp_type fun)
     if (fun(stack_top(s1), stack_top(s2)) > 0) {
         ele = stack_pop (s1);
         if(!ele ){
-          stack_free(s1);
-          stack_free(s2);
+          cleanfun(s1, s2);
           return ERROR;
         }
         list_pushFront (l1, ele);
@@ -159,8 +190,7 @@ Status listMergeOrdered (List *l1, List *l2, List *lout, f_cmp_type fun)
     else {
       ele = stack_pop (s2);
       if(!ele ){
-        stack_free(s1);
-        stack_free(s2);
+        cleanfun(s1, s2);
         return ERROR;
       }
       list_pushFront (l2, ele);
@@ -181,8 +211,7 @@ Status listMergeOrdered (List *l1, List *l2, List *lout, f_cmp_type fun)
   while (stack_isEmpty (saux) == FALSE){
   ele = stack_pop (saux);
   if(!ele ){
-    stack_free(s1);
-    stack_free(s2);
+    cleanfun(s1, s2);
     return ERROR;
   }
   list_pushFront (laux, ele);
@@ -191,8 +220,7 @@ Status listMergeOrdered (List *l1, List *l2, List *lout, f_cmp_type fun)
   }
 
 
-  stack_free (s1);
-  stack_free (s2);
+  cleanfun(s1, s2);
 
   return OK;
 }
@@ -212,4 +240,27 @@ Status listOfRandomOrdered (int n, List *pl)
       return ERROR;
     }
     return OK;
+}
+
+
+void cleanup(List *l1, List *l2, List *lout)
+{
+
+  if(!l1 || !l2 || !lout) return;
+
+  list_free(l1);
+  list_free(l2);
+  list_free(lout);
+
+  return ;
+}
+
+void cleanfun(Stack *s1, Stack *s2)
+{
+  if(!s1 || !s2) return;
+
+  stack_free(s1);
+  stack_free(s2);
+
+  return;
 }

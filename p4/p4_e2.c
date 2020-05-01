@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "queue_fp.h"
-#include "graph.h"
+#include "graph_list.h"
 #include "node.h"
 #include "types.h"
 

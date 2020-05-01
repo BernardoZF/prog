@@ -14,14 +14,15 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include "graph_list.h"
 #include "node.h"
-#include "graph.h"
+#include "list.h"
 #define MAX_NODES 1064
 #define MAX_LINE 1000
 enum {IDS_CONNECTS = 2, NUM_ARGUMENTS};
 
 struct _Graph {
-    Node *nodes[MAX_NODES];                  /*!<Array with the graph nodes*/
+    List *plnode;                            /*!<List with the graph nodes */
     Bool connections[MAX_NODES][MAX_NODES];  /*!<Adjacency matrix */
     int num_nodes;                           /*!<Number of nodes in the graph*/
     int num_edges;                           /*!<Number of connections in the graph */
@@ -42,8 +43,8 @@ Graph * graph_init ()
         fprintf(stderr,"Error reserving memory ");
         return NULL;
     }
+    g->plnode = list_new(node_free, node_copy, node_print, node_cmp);
     for(i=0;i<MAX_NODES;i++){
-        g->nodes[i]=NULL;
         for(j=0;j<MAX_NODES;j++){
             g->connections[i][j]=FALSE;
         }
@@ -58,13 +59,9 @@ Graph * graph_init ()
 
 void graph_free (Graph *g)
 {
-    int i;
+    if (!g)  return;
 
-    if (!g)
-        return ;
-    for(i=0;i<MAX_NODES;i++){
-        node_free(g->nodes[i]);
-    }
+    list_free(g->plnode);
     free(g);
 
     return;
@@ -74,33 +71,35 @@ void graph_free (Graph *g)
 
 Status graph_insertNode (Graph *g, const Node *n)
 {
-    int indx;
+    int index_lista;
 		int i;
+    Node *tmp;
 
     if(!g||!n){
         return ERROR;
     }
 
-   indx= find_node_index(g, node_getId(n));
-   if(indx != -1){
+   index_lista = find_node_index(g, node_getId(n));
+   if(index_lista != -1){
 		 return ERROR;
 	 }
 
-    g->nodes[g->num_nodes]=node_copy(n);
-    if(g->nodes[g->num_nodes]==NULL){
-			for(i=0;i<MAX_NODES;i++){
+    tmp =(Node *)node_copy(n);
+    node_setNConnect(tmp, 0);
+    if(list_pushFront(g->plnode, tmp) == ERROR){
+      for(i=0;i<g->num_nodes;i++){
 				g->connections[i][g->num_nodes]= FALSE;
 				g->connections[g->num_nodes][i]= FALSE;
 			}
-        return ERROR;
+      node_free(tmp);
+      return ERROR;
     }
-		node_setNConnect(g->nodes[g->num_nodes], 0);
-		for(i=0;i<MAX_NODES;i++){
-			g->connections[i][g->num_nodes]= FALSE;
-			g->connections[g->num_nodes][i]= FALSE;
-		}
-
+    for(i=0;i<g->num_nodes;i++){
+      g->connections[i][g->num_nodes]= FALSE;
+      g->connections[g->num_nodes][i]= FALSE;
+    }
     g->num_nodes++;
+    node_free(tmp);
 
     return OK;
 }
@@ -108,35 +107,41 @@ Status graph_insertNode (Graph *g, const Node *n)
 
 Status graph_insertEdge (Graph *g, const long nId1, const long nId2)
 {
-    int indx1, indx2, ncon;
+    int index_lista1;
+    int index_lista2;
+    int index_conn1;
+    int index_conn2;
+    int ncon;
 
     if (!g || nId1==-1 || nId1==-1) return ERROR;
 
-	indx1 = find_node_index(g, nId1);
-	indx2 = find_node_index(g, nId2);
+	index_lista1 = find_node_index(g, nId1);
+	index_lista2 = find_node_index(g, nId2);
 
-	if (indx1 == -1 || indx2 == -1){
-		return OK;
+	if (index_lista1 == -1 || index_lista2 == -1){
+		return ERROR;
 	}
 
-	if (g->connections[indx1][indx2] == TRUE){
+  index_conn1= g->num_nodes -1 - index_lista1;
+  index_conn2= g->num_nodes -1 - index_lista2;
+	if (g->connections[index_conn1][index_conn2] == TRUE){
 		fprintf(stderr, "Ya conectados.\n");
 		return OK;
 	}
 
 	(g->num_edges)++;
-	g->connections[indx1][indx2] = TRUE;
+	g->connections[index_conn1][index_conn2] = TRUE;
 
-	ncon = node_getNConnect(g->nodes[indx1]);
+	ncon = node_getNConnect(list_getElementInPos(g->plnode, index_lista1));
 	if (ncon == -1){
 		fprintf(stderr, "Error al obtener el numero de conexiones del nodo\n");
-		g->connections[indx1][indx2] = FALSE;
+		g->connections[index_conn1][index_conn2] = FALSE;
 		(g->num_edges)--;
 		return ERROR;
 	}
-	if(!node_setNConnect(g->nodes[indx1], ncon+1)){
+	if(!node_setNConnect(list_getElementInPos(g->plnode, index_lista1), ncon+1)){
 		fprintf(stderr, "Error al modificar el numero de conexiones del nodo\n");
-		g->connections[indx1][indx2] = FALSE;
+		g->connections[index_conn1][index_conn2] = FALSE;
 		(g->num_edges)--;
 		return ERROR;
     }
@@ -155,30 +160,33 @@ Node *graph_getNode (const Graph *g, long nId)
     indx=find_node_index(g, nId);
     if(indx<0)
         return NULL;
-    n=node_copy(g->nodes[indx]);
+    n=node_copy(list_getElementInPos(g->plnode, indx));
 
     return n;
 }
 
-
+/**
+* Esta implementacion lo que produce es que si hay algun fallo en algun punto el
+* nodo original no se restaura
+*/
 Status graph_setNode (Graph *g, const Node *n)
 {
     int indx;
-    Node *aux;
+    Node *nlista;
+
     if (!g||!n)
         return ERROR;
+
    indx = find_node_index(g, node_getId(n));
+
 	 if(indx == -1){
 		 return ERROR;
 	 }
-	aux=g->nodes[indx];
-    g->nodes[indx]=node_copy(n);
-	if(g->nodes[indx]==NULL){
-        g->nodes[indx]=aux;
-        return ERROR;
-    }
 
-    node_free(aux);
+	nlista=list_getElementInPos(g->plnode,indx);
+  node_setName(nlista, node_getName(n));
+  node_setLabel(nlista, node_getLabel(n));
+  node_setPredecessorId(nlista, node_getPredecessorId(n));
 
 	return OK;
 }
@@ -197,7 +205,7 @@ long * graph_getNodesId (const Graph *g)
         return NULL;
 
     for(i=0;i<g->num_nodes ;i++){
-        ids[i]=node_getId(g->nodes[i]);
+        ids[i]=node_getId(list_getElementInPos(g->plnode, i));
     }
 
 
@@ -228,18 +236,23 @@ int graph_getNumberOfEdges (const Graph *g)
 
 Bool graph_areConnected (const Graph *g, const long nId1, const long nId2)
 {
-    long indx1, indx2;
+    long index_lista1;
+    long index_lista2;
+    long index_conn1;
+    long index_conn2;
 
     if(!g||nId1==-1||nId2==-1)
         return FALSE;
-    indx1=find_node_index(g, nId1);
-    if(indx1<0)
+    index_lista1= find_node_index(g, nId1);
+    if(index_lista1 == -1)
         return FALSE;
-    indx2=find_node_index(g, nId2);
-    if(indx2<0)
+    index_lista2= find_node_index(g, nId2);
+    if(index_lista2 ==-1)
         return FALSE;
 
-    return g->connections[indx1][indx2];
+    index_conn1= g->num_nodes - 1 -index_lista1;
+    index_conn2= g->num_nodes - 1 -index_lista2;
+    return g->connections[index_conn1][index_conn2];
 }
 
 
@@ -256,7 +269,7 @@ int graph_getNumberOfConnectionsFrom (const Graph *g, const long fromId)
       return -1;
     }
 
-    return node_getNConnect(g->nodes[indx]);
+    return node_getNConnect(list_getElementInPos(g->plnode, indx));
 }
 
 
@@ -264,20 +277,34 @@ int graph_getNumberOfConnectionsFrom (const Graph *g, const long fromId)
 long* graph_getConnectionsFrom (const Graph *g, const long fromId)
 {
   long *array = NULL;
-  int i, j=0, tam;
+  int i;
+  int j=0;
+  int tam;
+  int index_lista;
+  int index_conn;
   if (!g) return NULL;
-  if (fromId == -1) return NULL;
+  if (fromId < 0 ) return NULL;
 
-  tam = node_getNConnect (g->nodes[find_node_index(g,fromId)]);
+  tam = graph_getNumberOfConnectionsFrom (g, fromId);
+  if(tam == -1) return NULL;
+
   array = (long *) malloc(sizeof(long) * tam);
   if (!array) {
     fprintf(stderr, "Error en reserva de memoria");
   return NULL;
   }
 
+  index_lista = find_node_index(g, fromId);
+  if(index_lista == -1){
+    free(array);
+    return NULL;
+  }
+
+  index_conn= g->num_nodes -1 - index_lista;
+
   for(i = 0; i< g->num_nodes; i++) {
-    if (g->connections[find_node_index(g,fromId)][i] == TRUE) {
-      array[j] = node_getId(g->nodes[i]);
+    if (g->connections[index_conn][i] == TRUE) {
+      array[j] = node_getId(list_getElementInPos(g->plnode,i));
       j++;
     }
   }
@@ -285,24 +312,26 @@ return array;
 }
 
 
-
+/**
+* cambiar casi por completo
+*/
 int graph_print (FILE *pf, const Graph *g)
 {
 
     int ret = 0;
-    int i, j, a, node_id;
+    int i, j, index_lista, node_id;
     long *conn = NULL;
 
     if(!pf || !g)
         return -1;
 
     for(i = 0; i < g->num_nodes; i++){
-        ret += node_print(pf, g->nodes[i]);
+        ret += node_print(pf, list_getElementInPos(g->plnode, i));
 
-        a = find_node_index(g, node_getId(g->nodes[i]));
-        conn = graph_getConnectionsIndex(g, a);
-        for(j=0;j < node_getNConnect(g->nodes[i]) ; j++){
-            node_id = node_getId(g->nodes[conn[j]]);
+        index_lista = find_node_index(g, node_getId(list_getElementInPos(g->plnode, i)));
+        conn = graph_getConnectionsIndex(g, index_lista);
+        for(j=0;j < node_getNConnect(list_getElementInPos(g->plnode, i)) ; j++){
+            node_id = node_getId(list_getElementInPos(g->plnode, conn[j]));
             ret += fprintf(pf, " %d", node_id);
         }
         fprintf(pf, "\n");
@@ -366,20 +395,22 @@ Status graph_readFromFile (FILE *fin, Graph *g)
 }
 
 
-/* It returns the index of the node with id nId1*/
+/* It returns the index of the node with id nId1*//*O(n)*/
 int find_node_index(const Graph * g, long nId1)
 {
-int i;
+Node *tmp;
+int index_lista;
 
 if (!g)
     return -1;
 
-for(i=0; i < g->num_nodes; i++) {
-if (node_getId (g->nodes[i]) == nId1) return i;
-}
+  tmp = node_init();
+  node_setId(tmp, nId1);
 
-/* ID not found*/
-return -1;
+  index_lista= list_getPositionElement(g->plnode, tmp);
+  node_free(tmp);
+
+return index_lista;
 }
 
 /**It returns an array with the indices of the nodes connected to the node whose index is index
@@ -388,6 +419,8 @@ return -1;
 long* graph_getConnectionsIndex(const Graph * g, int index)
 {
 long *array = NULL, i, j = 0, size;
+int index_conn;
+int index_list;
 
 if (!g)
     return NULL;
@@ -396,7 +429,7 @@ if (index < 0 || index >g->num_nodes)
     return NULL;
 
 /* get memory for the array*/
-size = node_getNConnect (g->nodes[index]);
+size = node_getNConnect (list_getElementInPos(g->plnode, index));
 array = (long *) malloc(sizeof (long) * size);
 
 if (!array) {
@@ -405,10 +438,12 @@ if (!array) {
     return NULL;
 }
 
+index_conn = g->num_nodes -1 - index;
 /*assign values to the array with the indices of the connected nodes*/
 for(i = 0; i< g->num_nodes; i++) {
-    if (g->connections[index][i] == TRUE) {
-        array[j++] = i;
+    if (g->connections[index_conn][i] == TRUE) {
+        index_list = g->num_nodes -1 -i;
+        array[j++] = index_list;
     }
 }
 

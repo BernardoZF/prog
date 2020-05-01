@@ -1,5 +1,5 @@
-CC = gcc -ansi -pedantic
-CFLAGS = -Wall
+CC = gcc
+CFLAGS = -g -Wall -ansi -pedantic
 LDFLAGS=-L./
 LDLIBS=-lstack_fp
 LIBS = -lm -pthread
