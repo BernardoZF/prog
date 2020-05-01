@@ -1,3 +1,14 @@
+/**
+* @file p4_e2.c
+* @author Bernardo zambrano && Alvaro Platon
+* @date 1 May 2020
+* @version 2.0
+* @brief ej2
+**
+@details
+**
+@see
+*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

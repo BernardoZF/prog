@@ -1,9 +1,9 @@
 /**
-* @file graph.c
+* @file graph_list.c
 * @author Bernardo zambrano && Alvaro Platon
-* @date 4 February 2020
-* @version 1.0
-* @brief TAD Node
+* @date 1 May 2020
+* @version 2.0
+* @brief TAD Graph_list
 **
 @details
 **
@@ -312,9 +312,6 @@ return array;
 }
 
 
-/**
-* cambiar casi por completo
-*/
 int graph_print (FILE *pf, const Graph *g)
 {
 

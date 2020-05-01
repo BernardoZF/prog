@@ -1,9 +1,9 @@
 /**
-* @file graph.h
-* @author Profesores Prog2
-* @date Created on 29 January 2020, 15:03
+* @file graph_list.h
+* @author Bernardo zambrano && Alvaro Platon
+* @date 1 May 2020
 * @version 1.0
-* @brief Library to manage TAD Graph
+* @brief Library to manage TAD Graph_list
 **
 @see
 */
