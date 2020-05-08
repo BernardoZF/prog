@@ -53,7 +53,9 @@ int main(int argc, char* argv[]){
     ids=graph_getNodesId(g);
     if(ids==NULL){
       fprintf(stderr, "Error al obtener los ids de los nodos\n");
+      fclose(pf);
       graph_free(g);
+      queue_free(q);
       return -1;
     }
     for(i=0;i<graph_getNumberOfNodes(g); i++){

@@ -5,7 +5,7 @@ LDFLAGS=-L./
 LDLIBS=-lstack_fp -llist
 ### -lm enlaza la biblioteca matematica, -pthread enlaza la biblioteca de hilos
 LIBS = -lm -pthread
-EXE= p4_e1 p4_e2
+EXE= p4_e1 p4_e2 p4_e3_a p4_e3_b
 
 all:$(EXE)
 
@@ -46,6 +46,35 @@ p4_e2.o: p4_e2.c
 		@echo "# Ha cambiado $<"
 		$(CC) -c -o $@ $< $(CFLAGS) $(IFLAGS)
 
+
+p4_e3_a: p4_e3_a.o liblist.a node.o graph_list.o tree.o
+		@echo "#---------------------------"
+		@echo "# Generando $@ "
+		@echo "# Depende de $^"
+		@echo "# Ha cambiado $<"
+		$(CC) -o $@ $< $(LDFLAGS) $(LDLIBS) $(LIBS) node.o graph_list.o tree.o liblist.a
+
+p4_e3_a.o: p4_e3_a.c
+		@echo "#---------------------------"
+		@echo "# Generando $@ "
+		@echo "# Depende de $^"
+		@echo "# Ha cambiado $<"
+		$(CC) -c -o $@ $< $(CFLAGS) $(IFLAGS)
+
+p4_e3_b: p4_e3_b.o liblist.a node.o graph_list.o tree.o extrafunctions_int.o
+		@echo "#---------------------------"
+		@echo "# Generando $@ "
+		@echo "# Depende de $^"
+		@echo "# Ha cambiado $<"
+		$(CC) -o $@ $< $(LDFLAGS) $(LDLIBS) $(LIBS) node.o graph_list.o tree.o liblist.a extrafunctions_int.o
+
+p4_e3_b.o: p4_e3_b.c
+		@echo "#---------------------------"
+		@echo "# Generando $@ "
+		@echo "# Depende de $^"
+		@echo "# Ha cambiado $<"
+		$(CC) -c -o $@ $< $(CFLAGS) $(IFLAGS)
+
 extrafunctions_int.o: extrafunctions_int.c extrafunctions_int.h
 	@echo "#---------------------------"
 	@echo "# Generando $@"
@@ -74,6 +103,13 @@ graph_list.o : graph_list.c graph_list.h
 	@echo "# Ha cambiado $<"
 	$(CC) $(CFLAGS) -c $<
 
+tree.o : tree.c tree.h
+	@echo "#---------------------------"
+	@echo "# Generando $@"
+	@echo "# Depende de $^"
+	@echo "# Ha cambiado $<"
+	$(CC) $(CFLAGS) -c $<
+
 
 ej1_test:
 	@echo Ejecutando p4_e1
@@ -81,4 +117,12 @@ ej1_test:
 
 ej2_test:
 	@echo Ejecutando p4_e2
-	@valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./p4_e2 g2_s.txt 1 4
+	@valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./p4_e2 g4.txt 100 200
+
+ej3_test:
+	@echo Ejecutando p4_e3_a
+	@valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./p4_e3_a g4.txt
+
+ej4_test:
+	@echo Ejecutando p4_e3_b
+	@valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./p4_e3_b 20

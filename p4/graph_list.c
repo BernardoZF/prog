@@ -113,7 +113,7 @@ Status graph_insertEdge (Graph *g, const long nId1, const long nId2)
     int index_conn2;
     int ncon;
 
-    if (!g || nId1==-1 || nId1==-1) return ERROR;
+    if (!g || nId1==-1 || nId2==-1) return ERROR;
 
 	index_lista1 = find_node_index(g, nId1);
 	index_lista2 = find_node_index(g, nId2);
@@ -129,20 +129,20 @@ Status graph_insertEdge (Graph *g, const long nId1, const long nId2)
 		return OK;
 	}
 
-	(g->num_edges)++;
+	g->num_edges++;
 	g->connections[index_conn1][index_conn2] = TRUE;
 
 	ncon = node_getNConnect(list_getElementInPos(g->plnode, index_lista1));
 	if (ncon == -1){
 		fprintf(stderr, "Error al obtener el numero de conexiones del nodo\n");
 		g->connections[index_conn1][index_conn2] = FALSE;
-		(g->num_edges)--;
+		g->num_edges--;
 		return ERROR;
 	}
 	if(!node_setNConnect(list_getElementInPos(g->plnode, index_lista1), ncon+1)){
 		fprintf(stderr, "Error al modificar el numero de conexiones del nodo\n");
 		g->connections[index_conn1][index_conn2] = FALSE;
-		(g->num_edges)--;
+		g->num_edges--;
 		return ERROR;
     }
 
@@ -278,6 +278,7 @@ long* graph_getConnectionsFrom (const Graph *g, const long fromId)
 {
   long *array = NULL;
   int i;
+  int i_conn;
   int j=0;
   int tam;
   int index_lista;
@@ -303,7 +304,8 @@ long* graph_getConnectionsFrom (const Graph *g, const long fromId)
   index_conn= g->num_nodes -1 - index_lista;
 
   for(i = 0; i< g->num_nodes; i++) {
-    if (g->connections[index_conn][i] == TRUE) {
+    i_conn= g->num_nodes -1 - i;
+    if (g->connections[index_conn][i_conn] == TRUE) {
       array[j] = node_getId(list_getElementInPos(g->plnode,i));
       j++;
     }
@@ -316,7 +318,7 @@ int graph_print (FILE *pf, const Graph *g)
 {
 
     int ret = 0;
-    int i, j, index_lista, node_id;
+    int i, j, index_lista;
     long *conn = NULL;
 
     if(!pf || !g)
@@ -326,10 +328,9 @@ int graph_print (FILE *pf, const Graph *g)
         ret += node_print(pf, list_getElementInPos(g->plnode, i));
 
         index_lista = find_node_index(g, node_getId(list_getElementInPos(g->plnode, i)));
-        conn = graph_getConnectionsIndex(g, index_lista);
+        conn = graph_getConnectionsFrom(g, node_getId(list_getElementInPos(g->plnode,index_lista)));
         for(j=0;j < node_getNConnect(list_getElementInPos(g->plnode, i)) ; j++){
-            node_id = node_getId(list_getElementInPos(g->plnode, conn[j]));
-            ret += fprintf(pf, " %d", node_id);
+            ret += fprintf(pf, " %ld", conn[j]);
         }
         fprintf(pf, "\n");
 
@@ -415,7 +416,7 @@ return index_lista;
  */
 long* graph_getConnectionsIndex(const Graph * g, int index)
 {
-long *array = NULL, i, j = 0, size;
+long *array = NULL, i, j = 0, size , i_conn;
 int index_conn;
 int index_list;
 
@@ -438,7 +439,8 @@ if (!array) {
 index_conn = g->num_nodes -1 - index;
 /*assign values to the array with the indices of the connected nodes*/
 for(i = 0; i< g->num_nodes; i++) {
-    if (g->connections[index_conn][i] == TRUE) {
+    i_conn= g->num_nodes -1 - i;
+    if (g->connections[index_conn][i_conn] == TRUE) {
         index_list = g->num_nodes -1 -i;
         array[j++] = index_list;
     }

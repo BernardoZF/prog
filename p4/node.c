@@ -150,8 +150,12 @@ Status node_setNConnect(Node * n, const int cn)
     n->nConnect=cn;
     return OK;
 }
+
 /*Esta funcion no la hemos corregido ya que hemos considerado
 que el identificador unico del nodo es el id*/
+/**
+* Funcion cambiada para que coincida con la ejecucion necesaria para p4_e3_a
+*/
 int node_cmp(const void * n1, const void * n2)
 {
     int cmp=0;
@@ -170,14 +174,21 @@ int node_cmp(const void * n1, const void * n2)
         cmp=0;
         return cmp;
     }
-
+    /**
     cmp=strcmp(node_getName(node1),node_getName(node2));
 
     if(cmp<0)
         return -1;
     else if (cmp>0)
         return 1;
+*/
 
+  if(node_getId(node1) < node_getId(node2)){
+    return -1;
+    }
+  else if (node_getId(node1) > node_getId(node2)){
+    return 1;
+  }
     return -2;
 }
 
@@ -213,7 +224,7 @@ int node_print(FILE *pf, const void *n)
 
     n1=(Node *)n;
 
-    chars=fprintf(pf, "[%ld, %s, %d, %d, %ld]", n1->id, n1->name, n1->label, n1->nConnect, n1->predecessorid);
+    chars=fprintf(pf, "[%ld, %s, %d, %d, %ld] ", n1->id, n1->name, n1->label, n1->nConnect, n1->predecessorid);
 
     return chars;
 }

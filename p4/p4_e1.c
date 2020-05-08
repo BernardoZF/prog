@@ -45,6 +45,8 @@ Status listMergeOrdered (List *l1, List *l2, List *lout, f_cmp_type fun);
 
 void cleanup(List *l1, List *l2, List *lout);
 
+void clean_2l(List *l1, List *l2);
+
 void cleanfun(Stack *s1, Stack *s2);
 
 int main(int argc, char* argv[])
@@ -71,8 +73,7 @@ int main(int argc, char* argv[])
 
   lout=list_new(extraint_free, extraint_copy, extraint_print, extraint_cmp);
   if(!lout){
-    list_free(l1);
-    list_free(l2);
+    clean_2l(l1, l2);
     return -1;
   }
 
@@ -142,6 +143,7 @@ Status listMergeOrdered (List *l1, List *l2, List *lout, f_cmp_type fun)
   Stack *s1, *s2, *saux;
   List *laux;
   void * ele;
+  Status flag = OK;
 
 
   if(!l1 || !l2 || !lout || !fun ) return ERROR;
@@ -167,25 +169,29 @@ Status listMergeOrdered (List *l1, List *l2, List *lout, f_cmp_type fun)
       free(ele);
   }
 
-  while (list_isEmpty (l2) == FALSE ){
+  while (list_isEmpty (l2) == FALSE && flag == OK){
     ele = list_popFront (l2);
     if(!ele ){
       cleanfun(s1, s2);
       return ERROR;
     }
-    stack_push (s2, ele);
+    flag = stack_push (s2, ele);
     free(ele);
+  }
+  if(flag!=OK){
+    cleanfun(s1, s2);
+    return ERROR;
   }
 
 
-  while ((stack_isEmpty (s1) == FALSE) && (stack_isEmpty (s2) == FALSE )){
+  while ((stack_isEmpty (s1) == FALSE) && (stack_isEmpty (s2) == FALSE ) && flag == OK){
     if (fun(stack_top(s1), stack_top(s2)) > 0) {
         ele = stack_pop (s1);
         if(!ele ){
           cleanfun(s1, s2);
           return ERROR;
         }
-        list_pushFront (l1, ele);
+        flag =list_pushFront (l1, ele);
     }
     else {
       ele = stack_pop (s2);
@@ -193,10 +199,14 @@ Status listMergeOrdered (List *l1, List *l2, List *lout, f_cmp_type fun)
         cleanfun(s1, s2);
         return ERROR;
       }
-      list_pushFront (l2, ele);
+      flag =list_pushFront (l2, ele);
     }
-    list_pushFront (lout, ele);
+    flag = list_pushFront (lout, ele);
     free(ele);
+  }
+  if(flag!=OK){
+    cleanfun(s1, s2);
+    return ERROR;
   }
 
   if (stack_isEmpty (s1) == TRUE) {
@@ -208,16 +218,21 @@ Status listMergeOrdered (List *l1, List *l2, List *lout, f_cmp_type fun)
     laux = l1;
   }
 
-  while (stack_isEmpty (saux) == FALSE){
+  while (stack_isEmpty (saux) == FALSE && flag == OK){
   ele = stack_pop (saux);
   if(!ele ){
     cleanfun(s1, s2);
     return ERROR;
   }
-  list_pushFront (laux, ele);
-  list_pushFront (lout, ele);
+  flag = list_pushFront (laux, ele);
+  flag =list_pushFront (lout, ele);
   free(ele);
   }
+  if(flag!=OK){
+    cleanfun(s1, s2);
+    return ERROR;
+  }
+
 
 
   cleanfun(s1, s2);
@@ -251,6 +266,17 @@ void cleanup(List *l1, List *l2, List *lout)
   list_free(l1);
   list_free(l2);
   list_free(lout);
+
+  return ;
+}
+
+void clean_2l(List *l1, List *l2)
+{
+
+  if(!l1 || !l2 ) return;
+
+  list_free(l1);
+  list_free(l2);
 
   return ;
 }
